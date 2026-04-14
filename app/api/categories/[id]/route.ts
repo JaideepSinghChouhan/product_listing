@@ -1,26 +1,26 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { requireAuth } from "@/lib/authMiddleware";
 
-export async function PUT(req: Request, { params }: any) {
-  const { id } = params;
-  const data = await req.json();
+export async function PUT(req: Request, context: any) {
+  try {
+    requireAuth(req);
 
-  const updated = await prisma.category.update({
-    where: { id },
-    data,
-  });
+    const { params } = context;
+    const { id } = await params; // ✅ FIX
 
-  return NextResponse.json(updated);
-}
+    const data = await req.json();
 
+    const updated = await prisma.category.update({
+      where: { id },
+      data,
+    });
 
-export async function DELETE(req: Request, { params }: any) {
-  const { id } = params;
-
-  await prisma.category.update({
-    where: { id },
-    data: { status: "HIDDEN" },
-  });
-
-  return NextResponse.json({ message: "Category hidden" });
+    return NextResponse.json(updated);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Unauthorized or update failed" },
+      { status: 401 }
+    );
+  }
 }

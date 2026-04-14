@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import { requireAuth } from "@/lib/authMiddleware";
 
 export async function GET() {
   const categories = await prisma.category.findMany({
@@ -9,8 +10,12 @@ export async function GET() {
   return NextResponse.json(categories);
 }
 
+
+
 export async function POST(req: Request) {
   try {
+    requireAuth(req);
+
     const { name, description, imageUrl, publicId } = await req.json();
 
     const category = await prisma.category.create({
@@ -25,8 +30,8 @@ export async function POST(req: Request) {
     return NextResponse.json(category);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to create category" },
-      { status: 500 }
+      { error: "Unauthorized or failed to create category" },
+      { status: 401 }
     );
   }
 }
