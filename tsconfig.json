@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
@@ -21,6 +22,13 @@
     "paths": {
       "@/*": ["./*"]
     }
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalEsm": true,
+    "transpileOnly": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true
   },
   "include": [
     "next-env.d.ts",

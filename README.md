@@ -34,3 +34,55 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+## PROJECT STRUCTURE
+project-root/
+│
+├── app/                     # Next.js App Router
+│   ├── api/                 # Backend routes (VERY IMPORTANT)
+│   │   ├── admin/
+│   │   │   ├── login/route.ts
+│   │   │   └── refresh/route.ts
+│   │   │
+│   │   ├── products/
+│   │   │   ├── route.ts
+│   │   │   └── [id]/route.ts
+│   │   │
+│   │   ├── categories/
+│   │   │   ├── route.ts
+│   │   │   └── [id]/route.ts
+│   │   │
+│   │   ├── enquiry/
+│   │   │   └── route.ts
+│   │   │
+│   │   ├── dashboard/
+│   │   │   └── route.ts
+│   │   │
+│   │   ├── hero/
+│   │   │   └── route.ts
+│   │   │
+│   │   ├── videos/
+│   │   │   └── route.ts
+│   │   │
+│   │   └── testimonials/
+│   │       └── route.ts
+│   │
+│   ├── admin/               # Admin panel UI (protected)
+│   ├── products/            # Public pages
+│   ├── page.tsx             # Home page
+│
+├── lib/                     # Core utilities
+│   ├── prisma.ts
+│   ├── cloudinary.ts
+│   ├── auth.ts
+│
+├── prisma/
+│   └── schema.prisma        # DB schema
+│
+├── middleware.ts            # Route protection
+│
+├── types/                   # TypeScript types (optional but good)
+│
+├── .env
+├── package.json

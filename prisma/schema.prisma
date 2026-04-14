@@ -1,0 +1,109 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  password  String
+  role      String    @default("admin")
+  lastLogin DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  imageUrl    String?
+  publicId    String? // cloudinary
+
+  status Status @default(ACTIVE)
+
+  products Product[]
+
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  sku         String @unique // unique product id
+  moq         Int?
+
+  images Json // multiple images [{url, publicId}]
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  status Status @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  leads     Lead[]
+}
+
+model Lead {
+  id       String  @id @default(uuid())
+  name     String
+  contact  String
+  message  String?
+  quantity Int?
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+
+  status LeadStatus @default(NEW)
+
+  notes Json? // [{text, createdAt}]
+
+  createdAt DateTime @default(now())
+}
+
+model Hero {
+  id       String  @id @default(uuid())
+  heading  String
+  subtext  String?
+  imageUrl String?
+  publicId String?
+
+  updatedAt DateTime @updatedAt
+}
+
+model Video {
+  id    String @id @default(uuid())
+  title String
+  url   String
+
+  createdAt DateTime @default(now())
+}
+
+model Testimonial {
+  id      String  @id @default(uuid())
+  name    String
+  role    String?
+  company String?
+  message String
+
+  createdAt DateTime @default(now())
+}
+
+enum Status {
+  ACTIVE
+  HIDDEN
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUOTED
+}
