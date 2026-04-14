@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Playfair_Display } from 'next/font/google'
 import { FloatingWhatsApp } from "./components/floating-whatsapp";
 import { PageTransition } from "./components/page-transition";
+import "react-loading-skeleton/dist/skeleton.css";
 import "../styles/global.css";
 
 const inter = Inter({
