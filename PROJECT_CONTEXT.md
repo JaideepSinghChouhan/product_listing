@@ -10,7 +10,7 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 - TypeScript
 - Prisma + Supabase (PostgreSQL)
 - Cloudinary (image storage)
-- JWT Auth (custom)
+- JWT (access only, 1 day expiry)
 - bcrypt (password hashing)
 
 ---
@@ -19,7 +19,7 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 
 ### ✅ Auth (COMPLETED)
 - Admin login
-- JWT access token (15 min)
+- JWT access token (1 day)
 - Token stored in localStorage
 - Auth handled inside APIs (not middleware)
 

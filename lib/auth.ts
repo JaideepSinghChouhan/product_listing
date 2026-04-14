@@ -5,7 +5,7 @@ const JWT_SECRET = process.env.JWT_SECRET!;
 
 export const generateAccessToken = (adminId: string) => {
   return jwt.sign({ adminId }, JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "1d",
   });
 };
 
