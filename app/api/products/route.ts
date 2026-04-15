@@ -42,19 +42,67 @@ export async function POST(req: Request) {
   }
 }
 
+export async function GET(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
 
-export async function GET() {
-  const products = await prisma.product.findMany({
-    where: {
+    const page = Number(searchParams.get("page")) || 1;
+    const limit = Number(searchParams.get("limit")) || 10;
+    const search = searchParams.get("search") || "";
+    const categoryId = searchParams.get("categoryId");
+
+    const skip = (page - 1) * limit;
+
+    const where: any = {
       status: "ACTIVE",
       category: {
         status: "ACTIVE",
       },
-    },
-    include: {
-      category: true,
-    },
-  });
+    };
 
-  return NextResponse.json(products);
+    // 🔍 Search filter
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: "insensitive" } },
+        { description: { contains: search, mode: "insensitive" } },
+        { sku: { contains: search, mode: "insensitive" } },
+      ];
+    }
+
+    // 📂 Category filter
+    if (categoryId) {
+      where.categoryId = categoryId;
+    }
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: "desc" },
+        include: {
+          category: true,
+        },
+      }),
+
+      prisma.product.count({ where }),
+    ]);
+
+    return NextResponse.json({
+      data: products,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
+  } catch (err) {
+    console.error("PRODUCT GET ERROR:", err);
+
+    return NextResponse.json(
+      { error: "Failed to fetch products" },
+      { status: 500 }
+    );
+  }
 }

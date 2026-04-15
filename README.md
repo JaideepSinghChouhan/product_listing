@@ -44,60 +44,72 @@ project-root/
 │   │
 │   │   ├── admin/
 │   │   │   ├── login/route.ts        ✅ DONE
-│   │   │   └── refresh/route.ts      ⚠️ (planned / partial)
+│   │   │   └── refresh/route.ts      ⚠️ (optional / future)
 │   │   │
 │   │   ├── products/                 ✅ DONE
 │   │   │   ├── route.ts              (GET, POST)
+│   │   │   ├── admin/                ✅ DONE
+│   │   │   │   └── route.ts          (GET all products)
 │   │   │   ├── [id]/
 │   │   │   │   └── route.ts          (PUT)
-│   │   │   └── toggle/
+│   │   │   └── [id]/toggle/
 │   │   │       └── route.ts          (PATCH hide/show)
 │   │   │
 │   │   ├── categories/               ✅ DONE
-│   │   │   ├── route.ts              (GET public, POST admin)
+│   │   │   ├── route.ts              (GET public, POST)
+│   │   │   ├── admin/                ✅ DONE
+│   │   │   │   └── route.ts          (GET all)
 │   │   │   └── [id]/
-│   │   │       └── route.ts          (PUT, toggle hide/show)
+│   │   │       ├── route.ts          (PUT)
+│   │   │       └── toggle/
+│   │   │           └── route.ts      (PATCH hide/show)
 │   │   │
-│   │   ├── leads/                    🚧 IN PROGRESS
+│   │   ├── leads/                    ✅ DONE
 │   │   │   ├── route.ts              (POST public)
 │   │   │   ├── admin/
 │   │   │   │   └── route.ts          (GET all leads)
 │   │   │   └── [id]/
 │   │   │       └── route.ts          (PATCH status + notes)
 │   │   │
-│   │   ├── dashboard/                ❌ NOT STARTED
-│   │   │   └── route.ts
+│   │   ├── dashboard/                ✅ DONE
+│   │   │   └── route.ts              (stats + recent leads)
 │   │   │
-│   │   ├── hero/                     ❌ NOT STARTED
-│   │   │   └── route.ts
+│   │   ├── hero/                     ✅ DONE
+│   │   │   └── route.ts              (GET, POST)
 │   │   │
-│   │   ├── videos/                   ❌ NOT STARTED
-│   │   │   └── route.ts
+│   │   ├── videos/                   ✅ DONE
+│   │   │   ├── route.ts              (GET, POST)
+│   │   │   └── [id]/
+│   │   │       └── route.ts          (DELETE)
 │   │   │
-│   │   └── testimonials/             ❌ NOT STARTED
-│   │       └── route.ts
+│   │   └── testimonials/             ✅ DONE
+│   │       ├── route.ts              (GET, POST)
+│   │       └── [id]/
+│   │           └── route.ts          (DELETE)
 │   │
-│   ├── admin/                        ⚠️ (UI later)
-│   ├── products/                     ⚠️ (UI later)
+│   ├── admin/                        ⚠️ (frontend later)
+│   ├── products/                     ⚠️ (frontend later)
 │   ├── page.tsx                      ⚠️ (frontend later)
 │
 ├── lib/
 │   ├── prisma.ts                     ✅ DONE
 │   ├── cloudinary.ts                 ✅ DONE
-│   ├── auth.ts                       ✅ DONE (JWT)
-│   ├── authMiddleware.ts             ✅ DONE (requireAuth)
+│   ├── auth.ts                       ✅ DONE
+│   ├── authMiddleware.ts             ✅ DONE
+│   ├── upload.ts                     ✅ DONE (Cloudinary helper)
+│   ├── mail.ts                       ✅ DONE (email notifications)
 │   │
-│   └── utils/                        ⚠️ optional future
+│   └── utils/                        ⚠️ optional
 │
 ├── prisma/
 │   └── schema.prisma                 ✅ UPDATED
 │
-├── middleware.ts                     ⚠️ PARTIAL (used but improving)
+├── middleware.ts                     ⚠️ minimal use (can keep or remove later)
 │
 ├── types/                            ⚠️ optional
 │
-├── PROJECT_CONTEXT.md                ✅ CREATED
-├── DECISIONS.md                      ✅ CREATED
+├── PROJECT_CONTEXT.md                ✅ UPDATED
+├── DECISIONS.md                      ✅ UPDATED
 │
 ├── .env                              ✅ CONFIGURED
 ├── package.json
