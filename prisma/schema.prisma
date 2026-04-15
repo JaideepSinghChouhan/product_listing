@@ -105,6 +105,14 @@ model Testimonial {
   createdAt DateTime @default(now())
 }
 
+model Client {
+  id        String   @id @default(uuid())
+  name      String
+  logoUrl   String
+  publicId  String
+  createdAt DateTime @default(now())
+}
+
 enum Status {
   ACTIVE
   HIDDEN
