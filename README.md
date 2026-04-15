@@ -39,50 +39,65 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## PROJECT STRUCTURE
 project-root/
 │
-├── app/                     # Next.js App Router
-│   ├── api/                 # Backend routes (VERY IMPORTANT)
+├── app/
+│   ├── api/
+│   │
 │   │   ├── admin/
-│   │   │   ├── login/route.ts
-│   │   │   └── refresh/route.ts
+│   │   │   ├── login/route.ts        ✅ DONE
+│   │   │   └── refresh/route.ts      ⚠️ (planned / partial)
 │   │   │
-│   │   ├── products/
-│   │   │   ├── route.ts
-│   │   │   └── [id]/route.ts
+│   │   ├── products/                 ✅ DONE
+│   │   │   ├── route.ts              (GET, POST)
+│   │   │   ├── [id]/
+│   │   │   │   └── route.ts          (PUT)
+│   │   │   └── toggle/
+│   │   │       └── route.ts          (PATCH hide/show)
 │   │   │
-│   │   ├── categories/
-│   │   │   ├── route.ts
-│   │   │   └── [id]/route.ts
+│   │   ├── categories/               ✅ DONE
+│   │   │   ├── route.ts              (GET public, POST admin)
+│   │   │   └── [id]/
+│   │   │       └── route.ts          (PUT, toggle hide/show)
 │   │   │
-│   │   ├── enquiry/
+│   │   ├── leads/                    🚧 IN PROGRESS
+│   │   │   ├── route.ts              (POST public)
+│   │   │   ├── admin/
+│   │   │   │   └── route.ts          (GET all leads)
+│   │   │   └── [id]/
+│   │   │       └── route.ts          (PATCH status + notes)
+│   │   │
+│   │   ├── dashboard/                ❌ NOT STARTED
 │   │   │   └── route.ts
 │   │   │
-│   │   ├── dashboard/
+│   │   ├── hero/                     ❌ NOT STARTED
 │   │   │   └── route.ts
 │   │   │
-│   │   ├── hero/
+│   │   ├── videos/                   ❌ NOT STARTED
 │   │   │   └── route.ts
 │   │   │
-│   │   ├── videos/
-│   │   │   └── route.ts
-│   │   │
-│   │   └── testimonials/
+│   │   └── testimonials/             ❌ NOT STARTED
 │   │       └── route.ts
 │   │
-│   ├── admin/               # Admin panel UI (protected)
-│   ├── products/            # Public pages
-│   ├── page.tsx             # Home page
+│   ├── admin/                        ⚠️ (UI later)
+│   ├── products/                     ⚠️ (UI later)
+│   ├── page.tsx                      ⚠️ (frontend later)
 │
-├── lib/                     # Core utilities
-│   ├── prisma.ts
-│   ├── cloudinary.ts
-│   ├── auth.ts
+├── lib/
+│   ├── prisma.ts                     ✅ DONE
+│   ├── cloudinary.ts                 ✅ DONE
+│   ├── auth.ts                       ✅ DONE (JWT)
+│   ├── authMiddleware.ts             ✅ DONE (requireAuth)
+│   │
+│   └── utils/                        ⚠️ optional future
 │
 ├── prisma/
-│   └── schema.prisma        # DB schema
+│   └── schema.prisma                 ✅ UPDATED
 │
-├── middleware.ts            # Route protection
+├── middleware.ts                     ⚠️ PARTIAL (used but improving)
 │
-├── types/                   # TypeScript types (optional but good)
+├── types/                            ⚠️ optional
 │
-├── .env
+├── PROJECT_CONTEXT.md                ✅ CREATED
+├── DECISIONS.md                      ✅ CREATED
+│
+├── .env                              ✅ CONFIGURED
 ├── package.json

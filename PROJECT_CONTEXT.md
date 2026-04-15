@@ -45,7 +45,7 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 - Product includes SKU (from catalogue, manual input)
 ---
 
-### 🔜 Leads
+### 🔜 Leads (NEXT)
 - Capture via form
 - Optional product reference
 - Status: NEW, CONTACTED, QUOTED
@@ -99,6 +99,11 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 - productId (optional)
 - status (NEW | CONTACTED | QUOTED)
 - notes (JSON)
+### ✅ Leads (COMPLETED)
+- Public lead creation
+- Optional product linking
+- Admin lead view
+- Status + notes system
 
 ---
 
@@ -145,8 +150,15 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 ✅ Prisma connected to Supabase  
 ✅ Auth system working  
 ✅ Categories module completed  
+- Auth: Done
+- Categories: Done
+- Products: Done
+- Leads: In Progress
+- CMS: Not Started
 
 ---
+
+
 
 ## 🔜 Next Step
 👉 Build Products Module (with Cloudinary upload)
