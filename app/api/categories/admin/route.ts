@@ -9,9 +9,10 @@ export async function GET(req: Request) {
     const categories = await prisma.category.findMany();
 
     return NextResponse.json(categories);
-  } catch (err) {
+  } catch (err:any) {
+    console.error("Fetch error:", err);
     return NextResponse.json(
-      { error: "Unauthorized" },
+      { error: "Unauthorized", details: err.message },
       { status: 401 }
     );
   }

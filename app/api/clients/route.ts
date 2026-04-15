@@ -29,11 +29,11 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(client);
-  } catch (err) {
+  } catch (err:any) {
     console.error("CLIENT CREATE ERROR:", err);
 
     return NextResponse.json(
-      { error: "Failed to create client" },
+      { error: "Failed to create client", details: err.message },
       { status: 500 }
     );
   }

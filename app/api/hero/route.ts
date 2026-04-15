@@ -31,9 +31,11 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(hero);
-  } catch {
+  } catch(err:any) {
+    console.error("Hero update/create error:", err);
+
     return NextResponse.json(
-      { error: "Unauthorized" },
+      { error: "Unauthorized", details: err.message },
       { status: 401 }
     );
   }

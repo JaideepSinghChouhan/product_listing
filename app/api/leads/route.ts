@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { sendLeadEmail } from "@/lib/mail";
+import { leadSchema } from "@/lib/validators";
 
 export async function POST(req: Request) {
   try {
@@ -18,8 +19,17 @@ export async function POST(req: Request) {
   utmCampaign,
 } = await req.json();
 
-    
-    if (!name || !contact) {
+    const validatedData = leadSchema.parse({
+      name,
+      contact,
+      email,
+      companyName,
+      requirement,
+      quantity,
+    });
+
+
+    if (!validatedData.name || !validatedData.contact) {
       return NextResponse.json(
         { error: "Name and contact required" },
         { status: 400 }
@@ -45,10 +55,10 @@ export async function POST(req: Request) {
     sendLeadEmail(lead);
 
     return NextResponse.json(lead);
-  } catch (err) {
+  } catch (err:any) {
     console.error("Error creating lead:", err);
     return NextResponse.json(
-      { error: "Failed to create lead" },
+      { error: "Failed to create lead" , details: err.message },
       { status: 500 }
     );
   }

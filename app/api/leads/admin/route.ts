@@ -14,9 +14,10 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(leads);
-  } catch {
+  } catch(err:any) {
+    console.error("Admin leads error:", err);
     return NextResponse.json(
-      { error: "Unauthorized" },
+      { error: "Unauthorized", details: err.message },
       { status: 401 }
     );
   }

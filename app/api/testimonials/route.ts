@@ -21,9 +21,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(testimonial);
-  } catch {
+  } catch(err:any) {
+    console.error("Testimonial create error:", err);
     return NextResponse.json(
-      { error: "Unauthorized" },
+      { error: "Unauthorized", details: err.message },
       { status: 401 }
     );
   }

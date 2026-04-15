@@ -28,9 +28,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(category);
-  } catch (error) {
+  } catch (err:any) {
+    console.error("Create error:", err);
     return NextResponse.json(
-      { error: "Unauthorized or failed to create category" },
+      { error: "Unauthorized or failed to create category", details: err.message },
       { status: 401 }
     );
   }

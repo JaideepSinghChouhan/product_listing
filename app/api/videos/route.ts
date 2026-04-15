@@ -19,9 +19,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(video);
-  } catch {
+  } catch(err:any) {
+    console.error("Video create error:", err);
     return NextResponse.json(
-      { error: "Unauthorized" },
+      { error: "Unauthorized", details: err.message },
       { status: 401 }
     );
   }

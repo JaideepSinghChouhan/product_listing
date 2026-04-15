@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { name, description, categoryId, images, moq, sku     } = body;
+    const { name, description, categoryId, images, moq, sku, customization } = body;
     // Upload images
     if (!sku) {
     return NextResponse.json(
@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       data: {
         name,
         description,
+        customization,
         categoryId,
         moq,
         images: uploadedImages,
@@ -34,9 +35,10 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(product);
-  } catch (err) {
+  } catch (err:any) {
+    console.error("PRODUCT CREATE ERROR:", err);
     return NextResponse.json(
-      { error: "Failed to create product" },
+      { error: "Failed to create product", details: err.message },
       { status: 500 }
     );
   }
@@ -97,11 +99,11 @@ export async function GET(req: Request) {
         totalPages: Math.ceil(total / limit),
       },
     });
-  } catch (err) {
+  } catch (err:any) {
     console.error("PRODUCT GET ERROR:", err);
 
     return NextResponse.json(
-      { error: "Failed to fetch products" },
+      { error: "Failed to fetch products", details: err.message },
       { status: 500 }
     );
   }

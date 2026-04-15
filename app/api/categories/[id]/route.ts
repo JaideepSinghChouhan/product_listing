@@ -17,9 +17,10 @@ export async function PUT(req: Request, context: any) {
     });
 
     return NextResponse.json(updated);
-  } catch (error) {
+  } catch (err:any) {
+    console.error("Update error:", err);
     return NextResponse.json(
-      { error: "Unauthorized or update failed" },
+      { error: "Unauthorized or update failed", details: err.message },
       { status: 401 }
     );
   }

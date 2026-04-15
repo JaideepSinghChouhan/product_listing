@@ -27,9 +27,10 @@ export async function PATCH(req: Request, context: any) {
     });
 
     return NextResponse.json(updated);
-  } catch (err) {
+  } catch (err:any) {
+    console.error("Toggle error:", err);
     return NextResponse.json(
-      { error: "Toggle failed" },
+      { error: "Toggle failed", details: err.message },
       { status: 500 }
     );
   }

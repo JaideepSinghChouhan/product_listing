@@ -13,9 +13,10 @@ export async function DELETE(req: Request, context: any) {
     });
 
     return NextResponse.json({ message: "Deleted" });
-  } catch {
+  } catch(err:any) {
+    console.error("Video delete error:", err);
     return NextResponse.json(
-      { error: "Failed" },
+      { error: "Failed", details: err.message },
       { status: 500 }
     );
   }

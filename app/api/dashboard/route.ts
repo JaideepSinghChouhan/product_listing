@@ -27,9 +27,10 @@ export async function GET(req: Request) {
       totalLeads,
       recentLeads,
     });
-  } catch {
+  } catch(err:any) {
+    console.error("Dashboard error:", err);
     return NextResponse.json(
-      { error: "Unauthorized" },
+      { error: "Unauthorized", details: err.message },
       { status: 401 }
     );
   }

@@ -37,9 +37,10 @@ export async function PATCH(req: Request, { params }: any) {
     });
 
     return NextResponse.json(updated);
-  } catch {
+  } catch(err :any) {
+    console.error("Lead update error:", err);
     return NextResponse.json(
-      { error: "Update failed" },
+      { error: "Update failed", details: err.message },
       { status: 500 }
     );
   }

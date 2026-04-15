@@ -41,9 +41,13 @@ export async function POST(req: Request) {
         email: admin.email,
       },
     });
-  } catch (error) {
+  } catch (err:any) {
+    console.error("Login error:", err);
     return NextResponse.json(
-      { error: "Server error" },
+      { 
+        error: "Server error",
+        details : err.message
+      },
       { status: 500 }
     );
   }

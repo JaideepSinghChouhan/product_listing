@@ -38,6 +38,7 @@ model Product {
   id          String @id @default(uuid())
   name        String
   description String
+  customization String?
   sku         String @unique // unique product id
   moq         Int?
 
@@ -111,6 +112,14 @@ model Client {
   logoUrl   String
   publicId  String
   createdAt DateTime @default(now())
+}
+
+model ContactInfo {
+  id      String @id @default(uuid())
+  address String
+  phone   String
+  email   String
+  mapUrl  String
 }
 
 enum Status {

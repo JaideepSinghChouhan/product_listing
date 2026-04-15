@@ -15,9 +15,10 @@ export async function PUT(req: Request, context: any) {
     });
 
     return NextResponse.json(updated);
-  } catch {
+  } catch(err:any) {
+    console.error("Product update error:", err);
     return NextResponse.json(
-      { error: "Update failed" },
+      { error: "Update failed", details: err.message },
       { status: 401 }
     );
   }

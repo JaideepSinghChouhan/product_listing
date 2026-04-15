@@ -20,9 +20,10 @@ export async function PATCH(req: Request, context: any) {
     });
 
     return NextResponse.json(updated);
-  } catch {
+  } catch(err:any) {
+    console.error("Product toggle error:", err);
     return NextResponse.json(
-      { error: "Toggle failed" },
+      { error: "Toggle failed", details: err.message },
       { status: 500 }
     );
   }

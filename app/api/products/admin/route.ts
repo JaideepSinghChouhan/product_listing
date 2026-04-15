@@ -11,7 +11,8 @@ export async function GET(req: Request) {
     });
 
     return NextResponse.json(products);
-  } catch {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  } catch(err:any) {
+    console.error("Admin products error:", err);
+    return NextResponse.json({ error: "Unauthorized", details: err.message }, { status: 401 });
   }
 }
