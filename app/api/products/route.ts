@@ -9,12 +9,19 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { name, description, categoryId, images, moq } = body;
+    const { name, description, categoryId, images, moq, sku     } = body;
     // Upload images
+    if (!sku) {
+    return NextResponse.json(
+    { error: "SKU is required" },
+    { status: 400 }
+    );
+    }
     const uploadedImages = await Promise.all(
       images.map((img: string) => uploadImage(img))
     );
     console.log(uploadedImages);
+    
     const product = await prisma.product.create({
       data: {
         name,
@@ -22,7 +29,7 @@ export async function POST(req: Request) {
         categoryId,
         moq,
         images: uploadedImages,
-        sku: `SKU-${Date.now()}`,
+        sku,
       },
     });
 

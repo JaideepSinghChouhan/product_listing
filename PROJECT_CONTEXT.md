@@ -39,9 +39,10 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 ### 🔜 Products (COMPLETED)
 - CRUD operations
 - Multiple image upload (Cloudinary)
+- Images uploaded via base64 → Cloudinary
 - Category relation
 - Hide/show support
-
+- Product includes SKU (from catalogue, manual input)
 ---
 
 ### 🔜 Leads
