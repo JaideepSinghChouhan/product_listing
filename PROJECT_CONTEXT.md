@@ -45,18 +45,18 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 - Product includes SKU (from catalogue, manual input)
 ---
 
-### 🔜 Leads (NEXT)
-- Capture via form
+### 🔜 Leads (COMPLETED)
+- CPublic lead creation
 - Optional product reference
 - Status: NEW, CONTACTED, QUOTED
 - Notes support
 
 ---
 
-### 🔜 CMS
-- Hero section (single entry)
-- Videos
-- Testimonials
+### 🔜 CMS (COMPLETED)
+- Hero section editable (single entry)
+- Videos CRUD
+- Testimonials CRUD
 
 ---
 
@@ -155,10 +155,26 @@ Build a CMS-based product catalogue system with lead generation (no e-commerce).
 - Products: Done
 - Leads: In Progress
 - CMS: Not Started
+Lead model upgraded:
+- email
+- companyName
+- requirement
+- UTM tracking fields
+
+### ✅ Dashboard (COMPLETED)
+- Total products
+- Total categories
+- Total leads
+- Recent leads
 
 ---
 
 
+Pending Backend Enhancements:
+- Product customization field
+- Client logos module
+- Contact info module
+- Search & pagination
 
 ## 🔜 Next Step
 👉 Build Products Module (with Cloudinary upload)

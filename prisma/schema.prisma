@@ -56,8 +56,16 @@ model Lead {
   id       String  @id @default(uuid())
   name     String
   contact  String
+  email     String?        // ✅ NEW
+  companyName String?  
   message  String?
+  requirement String?
   quantity Int?
+
+  // UTM tracking (optional but add now)
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
 
   productId String?
   product   Product? @relation(fields: [productId], references: [id])
