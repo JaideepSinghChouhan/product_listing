@@ -47,25 +47,25 @@ project-root/
 │   │   │   └── refresh/route.ts      ⚠️ (optional / future)
 │   │   │
 │   │   ├── products/                 ✅ DONE
-│   │   │   ├── route.ts              (GET, POST)
-│   │   │   ├── admin/                ✅ DONE
-│   │   │   │   └── route.ts          (GET all products)
+│   │   │   ├── route.ts              (GET: search + pagination, POST)
+│   │   │   ├── admin/
+│   │   │   │   └── route.ts          (GET all incl. hidden)
 │   │   │   ├── [id]/
-│   │   │   │   └── route.ts          (PUT)
+│   │   │   │   └── route.ts          (PUT update)
 │   │   │   └── [id]/toggle/
 │   │   │       └── route.ts          (PATCH hide/show)
 │   │   │
 │   │   ├── categories/               ✅ DONE
 │   │   │   ├── route.ts              (GET public, POST)
-│   │   │   ├── admin/                ✅ DONE
-│   │   │   │   └── route.ts          (GET all)
+│   │   │   ├── admin/
+│   │   │   │   └── route.ts          (GET all incl. hidden)
 │   │   │   └── [id]/
-│   │   │       ├── route.ts          (PUT)
+│   │   │       ├── route.ts          (PUT update)
 │   │   │       └── toggle/
 │   │   │           └── route.ts      (PATCH hide/show)
 │   │   │
-│   │   ├── leads/                    ✅ DONE
-│   │   │   ├── route.ts              (POST public)
+│   │   ├── leads/                    ✅ DONE (CRM)
+│   │   │   ├── route.ts              (POST public + email trigger)
 │   │   │   ├── admin/
 │   │   │   │   └── route.ts          (GET all leads)
 │   │   │   └── [id]/
@@ -74,39 +74,50 @@ project-root/
 │   │   ├── dashboard/                ✅ DONE
 │   │   │   └── route.ts              (stats + recent leads)
 │   │   │
-│   │   ├── hero/                     ✅ DONE
+│   │   ├── hero/                     ✅ DONE (CMS)
 │   │   │   └── route.ts              (GET, POST)
 │   │   │
-│   │   ├── videos/                   ✅ DONE
+│   │   ├── videos/                   ✅ DONE (CMS)
 │   │   │   ├── route.ts              (GET, POST)
 │   │   │   └── [id]/
 │   │   │       └── route.ts          (DELETE)
 │   │   │
-│   │   └── testimonials/             ✅ DONE
-│   │       ├── route.ts              (GET, POST)
-│   │       └── [id]/
-│   │           └── route.ts          (DELETE)
+│   │   ├── testimonials/             ✅ DONE (CMS)
+│   │   │   ├── route.ts              (GET, POST)
+│   │   │   └── [id]/
+│   │   │       └── route.ts          (DELETE)
+│   │   │
+│   │   ├── clients/                  ✅ DONE
+│   │   │   ├── route.ts              (GET, POST)
+│   │   │   └── [id]/
+│   │   │       └── route.ts          (DELETE)
+│   │   │
+│   │   └── contact/                  ✅ DONE
+│   │       └── route.ts              (GET, POST)
 │   │
-│   ├── admin/                        ⚠️ (frontend later)
-│   ├── products/                     ⚠️ (frontend later)
-│   ├── page.tsx                      ⚠️ (frontend later)
+│   ├── admin/                        🚧 (TO BUILD - Admin Panel UI)
+│   ├── products/                     🚧 (TO BUILD - Public pages)
+│   ├── page.tsx                      🚧 (Homepage)
 │
 ├── lib/
 │   ├── prisma.ts                     ✅ DONE
 │   ├── cloudinary.ts                 ✅ DONE
-│   ├── auth.ts                       ✅ DONE
-│   ├── authMiddleware.ts             ✅ DONE
-│   ├── upload.ts                     ✅ DONE (Cloudinary helper)
-│   ├── mail.ts                       ✅ DONE (email notifications)
+│   ├── upload.ts                     ✅ DONE
+│   ├── mail.ts                       ✅ DONE
 │   │
-│   └── utils/                        ⚠️ optional
+│   ├── auth.ts                       ✅ DONE (JWT logic)
+│   ├── authMiddleware.ts             ✅ DONE
+│   │
+│   ├── validators.ts                 ✅ NEW (Zod validation)
+│   │
+│   └── utils/                        ⚠️ optional helpers
 │
 ├── prisma/
-│   └── schema.prisma                 ✅ UPDATED
+│   └── schema.prisma                 ✅ FINALIZED
 │
-├── middleware.ts                     ⚠️ minimal use (can keep or remove later)
+├── middleware.ts                     ⚠️ (can simplify later)
 │
-├── types/                            ⚠️ optional
+├── types/                            ⚠️ optional (frontend types later)
 │
 ├── PROJECT_CONTEXT.md                ✅ UPDATED
 ├── DECISIONS.md                      ✅ UPDATED

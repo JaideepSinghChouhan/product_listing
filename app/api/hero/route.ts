@@ -1,42 +1,41 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authMiddleware";
+import { uploadImage } from "@/lib/upload";
 
 export async function GET() {
-  const hero = await prisma.hero.findFirst();
-  return NextResponse.json(hero);
-}
+  const heroes = await prisma.hero.findMany({
+    orderBy: { createdAt: "desc" },
+  });
 
+  return NextResponse.json(heroes);
+}
 
 export async function POST(req: Request) {
   try {
     requireAuth(req);
+    const { heading, subtext, image } = await req.json();
+    console.log("body: ", { heading, subtext, image });
 
-    const { heading, subtext, imageUrl, publicId } =
-      await req.json();
 
-    const existing = await prisma.hero.findFirst();
+    const uploaded = await uploadImage(image);
 
-    let hero;
-
-    if (existing) {
-      hero = await prisma.hero.update({
-        where: { id: existing.id },
-        data: { heading, subtext, imageUrl, publicId },
-      });
-    } else {
-      hero = await prisma.hero.create({
-        data: { heading, subtext, imageUrl, publicId },
-      });
-    }
+    const hero = await prisma.hero.create({
+      data: {
+        heading,
+        subtext,
+        imageUrl: uploaded.url,
+        publicId: uploaded.publicId,
+      },
+    });
 
     return NextResponse.json(hero);
-  } catch(err:any) {
-    console.error("Hero update/create error:", err);
+  } catch (err) {
+    console.error("HERO CREATE ERROR:", err);
 
     return NextResponse.json(
-      { error: "Unauthorized", details: err.message },
-      { status: 401 }
+      { error: "Failed to create hero slide" },
+      { status: 500 }
     );
   }
 }

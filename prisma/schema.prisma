@@ -79,13 +79,13 @@ model Lead {
 }
 
 model Hero {
-  id       String  @id @default(uuid())
-  heading  String
-  subtext  String?
-  imageUrl String?
-  publicId String?
+  id        String   @id @default(uuid())
+  heading   String
+  subtext   String
+  imageUrl  String
+  publicId  String
 
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 }
 
 model Video {
