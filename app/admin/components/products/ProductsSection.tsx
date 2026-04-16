@@ -13,7 +13,7 @@ export default function ProductsSection() {
 
   const fetchProducts = async () => {
     const data = await api("/products/admin"); // admin route
-    setProducts(data);
+    setProducts(Array.isArray(data) ? data : []);
   };
 
   useEffect(() => {

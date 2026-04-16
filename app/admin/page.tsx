@@ -8,6 +8,8 @@ import DashboardSection from "./components/dashboard/DashBoardSection";
 import ProductsSection from "./components/products/ProductsSection";
 import CategoriesSection from "./components/categories/CategoriesSection";
 import HeroSection from "./components/hero/HeroSection";
+import TestimonialsSection from "./components/testimonials/TestimonialsSection";
+import LeadsSection from "./components/leads/LeadsSection";
 
 type Section =
   | "dashboard"
@@ -37,6 +39,10 @@ export default function AdminPage() {
         {active === "categories" && <CategoriesSection />}
 
         {active === "hero" && <HeroSection />}
+
+        {active === "testimonials" && <TestimonialsSection />}
+
+        {active === "leads" && <LeadsSection />}
         </div>
       </div>
 

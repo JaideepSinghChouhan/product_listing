@@ -14,22 +14,23 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     requireAuth(req);
-    const { heading, subtext, image } = await req.json();
-    console.log("body: ", { heading, subtext, image });
 
+    const { heading, subtext, images } = await req.json();
 
-    const uploaded = await uploadImage(image);
+    const uploadedImages = await Promise.all(
+      images.map((img: string) => uploadImage(img))
+    );
 
     const hero = await prisma.hero.create({
       data: {
         heading,
         subtext,
-        imageUrl: uploaded.url,
-        publicId: uploaded.publicId,
+        images: uploadedImages,
       },
     });
 
     return NextResponse.json(hero);
+
   } catch (err) {
     console.error("HERO CREATE ERROR:", err);
 
