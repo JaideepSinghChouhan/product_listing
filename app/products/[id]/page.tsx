@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
-// import { SiteHeader } from "../components/site-header";
+import { SiteHeader } from "../../components/site-header";
 import { SiteFooter } from "../../components/site-footer";
 import { ProductCard } from "../../components/product-card";
 import {
@@ -91,7 +91,7 @@ export default function ProductDetailPage({ params}: PageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* <SiteHeader /> */}
+      <SiteHeader />
 
       <main>
         {/* 🔹 BREADCRUMB */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-// import { SiteHeader } from "@/components/site-header";
+import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { ProductCard } from "../components/product-card";
 import { Search, SlidersHorizontal, MessageCircle, X } from "lucide-react";
@@ -78,7 +78,7 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* <SiteHeader /> */}
+      <SiteHeader />
 
       <main>
         {/* HEADER */}
