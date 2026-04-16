@@ -1,9 +1,31 @@
-import Image from "next/image";
+import { SiteHeader } from "./components/site-header"
+import { SiteFooter } from "./components/site-footer"
+import { HeroSection } from "./components/home/hero-section"
+import { CategoriesSection } from "./components/home/categories-section"
+import { FeaturedProductsSection } from "./components/home/featured-products-section"
+import { TrustSection } from "./components/home/trust-section"
+// import { BulkSection } from "@/components/home/bulk-section"
+import { AboutSection } from "./components/home/about-section"
+import { TestimonialsSection } from "./components/home/testimonials-section"
+import { LeadCaptureSection } from "./components/home/lead-capture-section"
+import { ContactSection } from "./components/home/contact-section"
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      
+    <div className="min-h-screen bg-background">
+      <SiteHeader />
+      <main>
+        <HeroSection />
+        <CategoriesSection />
+        <FeaturedProductsSection />
+        <TrustSection />
+        {/* <BulkSection /> */}
+        <AboutSection />
+        <TestimonialsSection />
+        <LeadCaptureSection />
+        <ContactSection />
+      </main>
+      <SiteFooter />
     </div>
-  );
+  )
 }

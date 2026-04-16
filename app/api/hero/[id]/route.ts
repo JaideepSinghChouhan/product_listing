@@ -3,42 +3,30 @@ import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authMiddleware";
 import { v2 as cloudinary } from "cloudinary";
 
-export async function DELETE(req: Request, context: any) {
+export async function DELETE(req: Request, { params }: any) {
   try {
     requireAuth(req);
 
-    const { id } = await context.params;
-    const { publicId } = await req.json();
+    const { id } = params;
 
-    // delete from cloudinary
-    await cloudinary.uploader.destroy(publicId);
-
-    // get hero
     const hero = await prisma.hero.findUnique({
       where: { id },
     });
 
     if (!hero) {
-      return NextResponse.json({ error: "Hero not found" }, { status: 404 });
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
 
-    // filter images
-    const updatedImages = (hero.images as any[]).filter(
-      (img) => img.publicId !== publicId
-    );
+    await cloudinary.uploader.destroy(hero.publicId);
 
-    // update DB
-    await prisma.hero.update({
+    await prisma.hero.delete({
       where: { id },
-      data: {
-        images: updatedImages,
-      },
     });
 
-    return NextResponse.json({ message: "Image deleted" });
+    return NextResponse.json({ message: "Deleted" });
 
   } catch (err: any) {
-    console.error("DELETE IMAGE ERROR:", err);
+    console.error("DELETE HERO ERROR:", err);
 
     return NextResponse.json(
       { error: "Delete failed", details: err.message },

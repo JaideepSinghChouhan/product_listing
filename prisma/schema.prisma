@@ -80,17 +80,19 @@ model Lead {
 
 model Hero {
   id        String   @id @default(uuid())
-  heading   String
-  subtext   String
-  images    Json     // [{ url, publicId }]
+  heading   String?
+  subtext   String?
+
+  imageUrl  String
+  publicId  String
+
   createdAt DateTime @default(now())
 }
-
 model Video {
   id    String @id @default(uuid())
   title String
   url   String
-  
+
   createdAt DateTime @default(now())
 }
 

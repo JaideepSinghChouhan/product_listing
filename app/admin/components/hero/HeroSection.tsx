@@ -9,31 +9,22 @@ export default function HeroSection() {
   const [heading, setHeading] = useState("");
   const [subtext, setSubtext] = useState("");
 
-  const [images, setImages] = useState<File[]>([]);
-  const [existingImages, setExistingImages] = useState<any[]>([]);
-  const [heroId, setHeroId] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState("");
 
+  const [heroes, setHeroes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // FETCH HERO
+  // 🔥 FETCH ALL HERO SLIDES
+  const fetchHeroes = async () => {
+    const data = await api("/hero");
+    setHeroes(data || []);
+  };
+
   useEffect(() => {
-    const fetchHero = async () => {
-      const data = await api("/hero");
-
-      if (data?.length > 0) {
-        const hero = data[0];
-
-        setHeroId(hero.id);
-        setHeading(hero.heading || "");
-        setSubtext(hero.subtext || "");
-        setExistingImages(hero.images || []);
-      }
-    };
-
-    fetchHero();
+    fetchHeroes();
   }, []);
 
-  // CONVERT FILE → BASE64
   const convertToBase64 = (file: File) =>
     new Promise<string>((resolve, reject) => {
       const reader = new FileReader();
@@ -42,76 +33,39 @@ export default function HeroSection() {
       reader.onerror = reject;
     });
 
-  // DRAG DROP
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    setImages((prev) => [...prev, ...files]);
-  };
-
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setImages((prev) => [...prev, ...files]);
-  };
-
-  // REMOVE NEW IMAGE
-  const removeNewImage = (index: number) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  // REMOVE EXISTING IMAGE (UI ONLY for now)
-  const removeExistingImage = (index: number) => {
-    setExistingImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  
-  // SUBMIT
   const handleSave = async () => {
     try {
       setLoading(true);
 
-      let base64Images: string[] = [];
+      if (!image) return;
 
-      for (let file of images) {
-        const base64 = await convertToBase64(file);
-        base64Images.push(base64);
-      }
+      const base64 = await convertToBase64(image);
 
       await api("/hero", {
         method: "POST",
         body: JSON.stringify({
           heading,
           subtext,
-          images: base64Images,
+          image: base64,
         }),
       });
 
-      location.reload();
+      setImage(null);
+      setPreview("");
+      fetchHeroes();
 
-    } catch (err) {
-      console.error(err);
     } finally {
       setLoading(false);
     }
   };
-  
 
-  const deleteImage = async (publicId: string) => {
-  try {
-    await api(`/hero/${heroId}`, {
+  const deleteHero = async (id: string) => {
+    await api(`/hero/${id}`, {
       method: "DELETE",
-      body: JSON.stringify({ publicId }),
     });
 
-    // remove from UI
-    setExistingImages((prev) =>
-      prev.filter((img) => img.publicId !== publicId)
-    );
-
-  } catch (err) {
-    console.error(err);
-  }
-};
+    fetchHeroes();
+  };
 
   return (
     <div className="max-w-2xl flex flex-col gap-6">
@@ -135,86 +89,56 @@ export default function HeroSection() {
         />
 
         {/* Upload */}
-        <label
-          onDrop={handleDrop}
-          onDragOver={(e) => e.preventDefault()}
-          className="border-dashed border-2 p-6 flex flex-col items-center cursor-pointer rounded"
-        >
+        <label className="border-dashed border-2 p-6 flex flex-col items-center cursor-pointer rounded">
           <Upload className="w-6 h-6" />
-          <span>Drag & drop or click</span>
+          <span>Upload Image</span>
 
           <input
             type="file"
-            multiple
             hidden
-            onChange={handleFileSelect}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                setImage(file);
+                setPreview(URL.createObjectURL(file));
+              }
+            }}
           />
         </label>
 
-        {/* EXISTING IMAGES */}
-{existingImages.length > 0 && (
-  <div>
-    <p className="text-sm mb-2">Hero Images</p>
-
-    <div className="grid grid-cols-3 gap-3">
-      {existingImages.map((img, i) => (
-        <div
-          key={i}
-          className="relative w-full h-24 rounded overflow-hidden border group"
-        >
-          <Image
-            src={img.url}
-            alt=""
-            fill
-            className="object-cover"
-          />
-
-          {/* DELETE BUTTON */}
-          <button
-            onClick={() => deleteImage(img.publicId)}
-            className="absolute top-1 right-1 bg-black/70 text-white p-1 rounded opacity-0 group-hover:opacity-100 transition"
-          >
-            <X size={14} />
-          </button>
-        </div>
-      ))}
-    </div>
-  </div>
-)}
-
-        {/* NEW IMAGES */}
-        {images.length > 0 && (
-          <div>
-            <p className="text-sm mb-2">New</p>
-            <div className="flex gap-2 flex-wrap">
-              {images.map((img, i) => (
-                <div key={i} className="relative w-20 h-20">
-                  <img
-                    src={URL.createObjectURL(img)}
-                    className="object-cover rounded w-full h-full"
-                  />
-                  <button
-                    onClick={() => removeNewImage(i)}
-                    className="absolute top-0 right-0 bg-black text-white rounded-full p-1"
-                  >
-                    <X size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
+        {/* PREVIEW */}
+        {preview && (
+          <div className="relative w-full h-40">
+            <img src={preview} className="w-full h-full object-cover rounded" />
           </div>
         )}
 
         {/* SAVE */}
         <button
           onClick={handleSave}
-          disabled={loading}
-          className="bg-accent text-white py-3 rounded active:scale-95"
+          className="bg-accent text-white py-3 rounded"
         >
-          {loading ? "Saving..." : "Save"}
+          {loading ? "Saving..." : "Add Slide"}
         </button>
 
       </div>
+
+      {/* 🔥 EXISTING HERO GRID */}
+      <div className="grid grid-cols-3 gap-3">
+        {heroes.map((hero) => (
+          <div key={hero.id} className="relative h-24 rounded overflow-hidden border group">
+            <Image src={hero.imageUrl} alt="" fill className="object-cover" />
+
+            <button
+              onClick={() => deleteHero(hero.id)}
+              className="absolute top-1 right-1 bg-black text-white p-1 rounded opacity-0 group-hover:opacity-100"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 }

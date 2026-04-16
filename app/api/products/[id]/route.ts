@@ -2,6 +2,14 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authMiddleware";
 
+export async function GET(req: Request, { params }: any) {
+  const { id } = await params;
+  const product = await prisma.product.findUnique({
+    where: { id },
+  });
+  return NextResponse.json(product);
+}
+
 export async function PUT(req: Request, context: any) {
   try {
     requireAuth(req);

@@ -11,31 +11,35 @@ export async function GET() {
   return NextResponse.json(heroes);
 }
 
+// 🔥 ONE IMAGE = ONE SLIDE
 export async function POST(req: Request) {
   try {
     requireAuth(req);
 
-    const { heading, subtext, images } = await req.json();
+    const { heading, subtext, image } = await req.json();
 
-    const uploadedImages = await Promise.all(
-      images.map((img: string) => uploadImage(img))
-    );
+    if (!image) {
+      return NextResponse.json({ error: "Image required" }, { status: 400 });
+    }
+
+    const uploaded = await uploadImage(image);
 
     const hero = await prisma.hero.create({
       data: {
         heading,
         subtext,
-        images: uploadedImages,
+        imageUrl: uploaded.url,
+        publicId: uploaded.publicId,
       },
     });
 
     return NextResponse.json(hero);
 
-  } catch (err) {
+  } catch (err: any) {
     console.error("HERO CREATE ERROR:", err);
 
     return NextResponse.json(
-      { error: "Failed to create hero slide" },
+      { error: "Failed to create hero slide", details: err.message },
       { status: 500 }
     );
   }

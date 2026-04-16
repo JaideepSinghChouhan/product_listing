@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authMiddleware";
+import { uploadImage } from "@/lib/upload";
 
 export async function GET() {
   const categories = await prisma.category.findMany({
@@ -16,16 +17,18 @@ export async function POST(req: Request) {
   try {
     requireAuth(req);
 
-    const { name, description, imageUrl, publicId } = await req.json();
+    const { name, description, image } = await req.json();
 
-    const category = await prisma.category.create({
-      data: {
-        name,
-        description,
-        imageUrl,
-        publicId,
-      },
-    });
+  const uploaded = await uploadImage(image);
+
+  const category = await prisma.category.create({
+  data: {
+    name,
+    description,
+    imageUrl: uploaded.url,
+    publicId: uploaded.publicId,
+  },
+  });
 
     return NextResponse.json(category);
   } catch (err:any) {

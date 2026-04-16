@@ -102,7 +102,7 @@ const handleSubmit = async () => {
         }),
       });
     }
-
+    setImages([]);
     refresh();
     onClose();
 
