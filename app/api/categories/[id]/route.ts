@@ -25,3 +25,21 @@ export async function PUT(req: Request, context: any) {
     );
   }
 }
+
+export async function DELETE(req: Request, context: any) {
+  try {
+    requireAuth(req);
+    const { params } = context;
+    const { id } = await params; // ✅ FIX
+    await prisma.category.delete({
+      where: { id },
+    });
+    return NextResponse.json({ message: "Category deleted" });
+  } catch (err:any) {
+    console.error("Delete error:", err);
+    return NextResponse.json(
+      { error: "Unauthorized or delete failed", details: err.message },
+      { status: 401 }
+    );
+  }
+}

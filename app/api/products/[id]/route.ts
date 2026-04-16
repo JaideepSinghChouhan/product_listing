@@ -23,3 +23,22 @@ export async function PUT(req: Request, context: any) {
     );
   }
 }
+
+export async function DELETE(req: Request, { params }: any) {
+  try {
+    const { id } =await params;
+
+    await prisma.product.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ message: "Product deleted" });
+  } catch (err: any) {
+    console.error("DELETE ERROR:", err);
+
+    return NextResponse.json(
+      { error: "Delete failed", details: err.message },
+      { status: 500 }
+    );
+  }
+}

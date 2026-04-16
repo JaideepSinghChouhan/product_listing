@@ -17,9 +17,9 @@ export async function POST(req: Request) {
     { status: 400 }
     );
     }
-    const uploadedImages = await Promise.all(
+    const uploadedImages =images.length > 0 ? await Promise.all(
       images.map((img: string) => uploadImage(img))
-    );
+    ) : [];
     console.log(uploadedImages);
     
     const product = await prisma.product.create({
