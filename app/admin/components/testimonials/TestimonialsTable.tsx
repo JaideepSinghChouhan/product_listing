@@ -18,7 +18,8 @@ export default function TestimonialsTable({ data, refresh }: any) {
   return (
     <div className="border rounded-xl bg-surface overflow-hidden">
 
-      <table className="w-full">
+      <div className="overflow-x-auto">
+      <table className="w-full min-w-[680px]">
         <thead>
           <tr className="border-b">
             <th className="px-5 py-3 text-left text-xs uppercase">Client</th>
@@ -65,6 +66,7 @@ export default function TestimonialsTable({ data, refresh }: any) {
           ))}
         </tbody>
       </table>
+      </div>
 
     </div>
   );

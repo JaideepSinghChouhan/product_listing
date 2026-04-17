@@ -22,7 +22,8 @@ export default function LeadsTable({ leads, refresh }: any) {
     <>
       <div className="border rounded-2xl bg-surface overflow-hidden">
 
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[960px] text-sm">
           <thead>
             <tr className="border-b text-muted-foreground uppercase text-xs tracking-wide">
 
@@ -92,6 +93,7 @@ export default function LeadsTable({ leads, refresh }: any) {
             ))}
           </tbody>
         </table>
+        </div>
 
       </div>
 

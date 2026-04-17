@@ -90,9 +90,12 @@ model Hero {
   createdAt DateTime @default(now())
 }
 model Video {
-  id    String @id @default(uuid())
-  title String
-  url   String
+  id                 String   @id @default(uuid())
+  title              String
+  url                String
+  publicId           String?
+  thumbnailUrl       String?
+  thumbnailPublicId  String?
 
   createdAt DateTime @default(now())
 }

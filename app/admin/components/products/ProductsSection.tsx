@@ -34,24 +34,24 @@ export default function ProductsSection() {
     <div className="flex flex-col gap-6">
 
       {/* Top bar */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
 
         {/* Search */}
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search products..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 pr-4 py-2.5 border rounded-lg bg-surface text-sm"
+            className="w-full sm:w-[260px] pl-10 pr-4 py-2.5 border rounded-lg bg-surface text-sm"
           />
         </div>
 
         {/* Add */}
         <button
         onClick={() => setOpen(true)}
-            className="flex items-center gap-2 px-4 py-2.5 bg-accent text-white rounded-lg text-sm active:scale-95 hover:bg-accent/90"
+            className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2.5 bg-accent text-white rounded-lg text-sm active:scale-95 hover:bg-accent/90"
         >
         <Plus className="w-4 h-4" />
         Add Product

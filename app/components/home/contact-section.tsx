@@ -49,7 +49,8 @@ export function ContactSection() {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to submit form");
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData?.details || errorData?.error || "Failed to submit form");
       }
 
       setForm({
@@ -61,8 +62,8 @@ export function ContactSection() {
       });
 
       alert("Enquiry Sent!");
-    } catch {
-      alert("Error submitting form");
+    } catch (err: any) {
+      alert(err?.message || "Error submitting form");
     } finally {
       setLoading(false);
     }

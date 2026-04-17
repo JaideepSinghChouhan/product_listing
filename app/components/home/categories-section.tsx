@@ -48,6 +48,7 @@ export function CategoriesSection() {
                 src={cat.imageUrl}
                 alt={cat.name}
                 fill
+                sizes="(max-width: 640px) 50vw, 33vw"
                 className="object-cover group-hover:scale-105 transition"
               />
 
@@ -64,7 +65,7 @@ export function CategoriesSection() {
 
       {/* 🔥 CASE 2: INFINITE SCROLL */}
       {isScrollable && (
-        <div className="overflow-hidden">
+        <div className="overflow-hidden px-4 sm:px-6 md:px-12">
 
           <div className="flex gap-4 w-max animate-marquee">
 
@@ -79,6 +80,7 @@ export function CategoriesSection() {
                   src={cat.imageUrl}
                   alt={cat.name}
                   fill
+                  sizes="(max-width: 640px) 140px, (max-width: 768px) 180px, 220px"
                   className="object-cover group-hover:scale-105 transition duration-300"
                 />
 

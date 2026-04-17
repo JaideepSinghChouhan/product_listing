@@ -24,12 +24,12 @@ export default function CategoriesSection() {
     <div className="flex flex-col gap-6">
 
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
         <h2 className="font-playfair text-xl">Categories</h2>
 
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-accent text-white rounded active:scale-95"
+          className="w-full sm:w-auto justify-center flex items-center gap-2 px-4 py-2 bg-accent text-white rounded active:scale-95"
         >
           <Plus className="w-4 h-4" />
           Add Category

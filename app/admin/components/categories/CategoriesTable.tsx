@@ -28,7 +28,8 @@ export default function CategoriesTable({ categories, refresh }: any) {
   return (
     <>
       <div className="border rounded-xl bg-surface overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[560px]">
 
           <thead>
             <tr className="border-b">
@@ -91,6 +92,7 @@ export default function CategoriesTable({ categories, refresh }: any) {
           </tbody>
 
         </table>
+        </div>
       </div>
 
       {edit && (

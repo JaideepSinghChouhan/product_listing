@@ -34,7 +34,8 @@ const handleDelete = async (id: string) => {
   return (
     <>
       <div className="border rounded-xl bg-surface overflow-hidden">
-        <table className="w-full">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[760px]">
           <thead>
             <tr className="border-b">
               <th className="text-left px-5 py-3 text-xs uppercase">Product</th>
@@ -60,6 +61,7 @@ const handleDelete = async (id: string) => {
                         src={p.images?.[0]?.url || "/placeholder.png"}
                         alt={p.name}
                         fill
+                        sizes="40px"
                         className="object-cover"
                       />
                     </div>
@@ -123,6 +125,7 @@ const handleDelete = async (id: string) => {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {/* EDIT MODAL */}

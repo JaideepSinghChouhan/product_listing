@@ -27,7 +27,7 @@ export function FeaturedProductsSection() {
     const fetchCategories = async () => {
       const res = await fetch("/api/categories");
       const data = await res.json();
-      console.log("Fetched categories:", data);
+      
       setCategories(Array.isArray(data) ? data.slice(0, 6) : []);
     };
 
@@ -100,6 +100,7 @@ export function FeaturedProductsSection() {
                   src={product.images?.[0]?.url || "/placeholder.png"}
                   alt={product.name}
                   fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                   className="object-cover"
                 />
               </div>

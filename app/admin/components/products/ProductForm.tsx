@@ -115,9 +115,9 @@ const handleSubmit = async () => {
 };
 
   return (
-    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-50 px-4 py-6">
 
-      <div className="bg-surface p-6 rounded-xl w-[420px] flex flex-col gap-4">
+      <div className="bg-surface p-5 sm:p-6 rounded-xl w-full max-w-[520px] max-h-full overflow-y-auto flex flex-col gap-4">
 
         {/* Header */}
         <div className="flex justify-between items-center">

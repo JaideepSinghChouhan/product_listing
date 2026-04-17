@@ -50,7 +50,7 @@ export default function ProductDetailPage({ params}: PageProps) {
   // ✅ FETCH PRODUCT + RELATED
   useEffect(() => {
     const fetchProduct = async () => {
-      try {
+      try { 
         const res = await fetch(`/api/products/${id}`);
         const data = await res.json();
 
@@ -117,6 +117,7 @@ export default function ProductDetailPage({ params}: PageProps) {
                   src={images[activeImage] || "/placeholder.png"}
                   alt={product.name}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
                 />
 
@@ -135,7 +136,7 @@ export default function ProductDetailPage({ params}: PageProps) {
                       activeImage === i ? "border-black" : ""
                     }`}
                   >
-                    <Image src={img} alt="" fill className="object-cover" />
+                    <Image src={img} alt="" fill sizes="64px" className="object-cover" />
                   </button>
                 ))}
               </div>
@@ -147,7 +148,7 @@ export default function ProductDetailPage({ params}: PageProps) {
                 {product.category?.name}
               </p>
 
-              <h1 className="text-2xl md:text-4xl font-serif mb-3">
+              <h1 className="text-2xl md:text-4xl font-playfair mb-3">
                 {product.name}
               </h1>
 
@@ -180,7 +181,7 @@ export default function ProductDetailPage({ params}: PageProps) {
 
                 <a
                   href="tel:+919876543210"
-                  className="px-5 py-3 border rounded-full text-center"
+                  className="w-full sm:w-auto px-5 py-3 border rounded-full text-center"
                 >
                   Call
                 </a>
@@ -242,7 +243,7 @@ export default function ProductDetailPage({ params}: PageProps) {
                   <Send className="w-6 h-6 text-foreground" />
                 </div>
 
-                <h3 className="font-playfair text-4xl mb-2">Enquiry Submitted</h3>
+                <h3 className="font-playfair text-3xl sm:text-4xl mb-2">Enquiry Submitted</h3>
 
                 <p className="text-foreground-muted text-sm mb-5">
                   Our team will contact you shortly.
@@ -409,8 +410,8 @@ export default function ProductDetailPage({ params}: PageProps) {
         <section className="py-12 px-4 border-t">
           <div className="max-w-7xl mx-auto">
 
-            <div className="flex justify-between mb-6">
-              <h2 className="text-2xl font-serif">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6">
+              <h2 className="text-2xl font-playfair">
                 Related Products
               </h2>
 

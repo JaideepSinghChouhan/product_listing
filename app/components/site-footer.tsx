@@ -12,7 +12,7 @@ export function SiteFooter() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
 
         {/* GRID */}
-        <div className="grid md:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
 
           {/* LEFT - BRAND */}
           <div className="flex flex-col gap-4">
@@ -23,6 +23,7 @@ export function SiteFooter() {
                 src={logo}
                 alt="logo"
                 fill
+                sizes="128px"
                 className="object-contain"
               />
             </div>
@@ -54,7 +55,7 @@ export function SiteFooter() {
           </div>
 
           {/* BRAND LINKS */}
-          <div>
+          <div className="sm:justify-self-end md:justify-self-auto">
             <h3 className="font-medium mb-4">Brand</h3>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link href="#">About Us</Link>
@@ -63,7 +64,7 @@ export function SiteFooter() {
           </div>
 
           {/* HELP LINKS */}
-          <div>
+          <div className="sm:justify-self-end md:justify-self-auto">
             <h3 className="font-medium mb-4">Help</h3>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
               <Link href="#">Privacy Policy</Link>

@@ -1,17 +1,31 @@
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+function getMailerConfig() {
+  const user = process.env.EMAIL_USER?.trim();
+  const pass = process.env.EMAIL_PASS?.replace(/\s+/g, "");
+  const to = process.env.CLIENT_EMAIL?.trim();
+
+  if (!user || !pass || !to) {
+    throw new Error("Missing EMAIL_USER, EMAIL_PASS, or CLIENT_EMAIL in environment");
+  }
+
+  return { user, pass, to };
+}
 
 export const sendLeadEmail = async (lead: any) => {
+  const { user, pass, to } = getMailerConfig();
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user,
+      pass,
+    },
+  });
+
   await transporter.sendMail({
-    from: `"Lead Alert" <${process.env.EMAIL_USER}>`,
-    to: process.env.CLIENT_EMAIL, // client email
+    from: `"Lead Alert" <${user}>`,
+    to, // client email
     subject: "🚀 New Lead Received",
     html: `
     <h2>🚀 New Lead Received</h2>

@@ -68,7 +68,7 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="max-w-2xl flex flex-col gap-6">
+    <div className="max-w-2xl w-full flex flex-col gap-6">
 
       <div className="p-6 rounded-2xl bg-surface border flex flex-col gap-5">
 
@@ -124,10 +124,10 @@ export default function HeroSection() {
       </div>
 
       {/* 🔥 EXISTING HERO GRID */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {heroes.map((hero) => (
           <div key={hero.id} className="relative h-24 rounded overflow-hidden border group">
-            <Image src={hero.imageUrl} alt="" fill className="object-cover" />
+            <Image src={hero.imageUrl} alt="" fill sizes="(max-width: 640px) 50vw, 33vw" className="object-cover" />
 
             <button
               onClick={() => deleteHero(hero.id)}

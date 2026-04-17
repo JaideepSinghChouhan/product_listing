@@ -8,6 +8,7 @@ import DashboardSection from "./components/dashboard/DashBoardSection";
 import ProductsSection from "./components/products/ProductsSection";
 import CategoriesSection from "./components/categories/CategoriesSection";
 import HeroSection from "./components/hero/HeroSection";
+import VideosSection from "./components/videos/VideosSection";
 import TestimonialsSection from "./components/testimonials/TestimonialsSection";
 import LeadsSection from "./components/leads/LeadsSection";
 
@@ -22,16 +23,22 @@ type Section =
 
 export default function AdminPage() {
   const [active, setActive] = useState<Section>("dashboard");
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-background">
 
-      <Sidebar active={active} setActive={setActive} />
+      <Sidebar
+        active={active}
+        setActive={setActive}
+        mobileOpen={mobileSidebarOpen}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
+      />
 
-      <div className="flex-1 flex flex-col">
-        <Topbar title={active} />
+      <div className="flex-1 flex flex-col md:ml-0">
+        <Topbar title={active} onOpenMenu={() => setMobileSidebarOpen(true)} />
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
         {active === "dashboard" && <DashboardSection />}
 
         {active === "products" && <ProductsSection />}
@@ -39,6 +46,8 @@ export default function AdminPage() {
         {active === "categories" && <CategoriesSection />}
 
         {active === "hero" && <HeroSection />}
+
+        {active === "videos" && <VideosSection />}
 
         {active === "testimonials" && <TestimonialsSection />}
 

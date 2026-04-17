@@ -51,8 +51,20 @@ export async function POST(req: Request) {
     utmCampaign: utmCampaign || null,
   },
 });
-   
-    sendLeadEmail(lead);
+
+    try {
+      await sendLeadEmail(lead);
+    } catch (mailErr: any) {
+      console.error("Lead saved but notification failed:", mailErr);
+      return NextResponse.json(
+        {
+          error: "Lead saved, but notification email failed",
+          details: mailErr?.message || "Unknown mail error",
+          lead,
+        },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json(lead);
   } catch (err:any) {

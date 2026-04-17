@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { ProductCard } from "../components/product-card";
-import { Search, SlidersHorizontal, MessageCircle, X } from "lucide-react";
+import { Search, MessageCircle } from "lucide-react";
 
 const sortOptions = [
   { value: "default", label: "Featured" },
@@ -19,7 +19,6 @@ export default function ProductsPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [sort, setSort] = useState("default");
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [page, setPage] = useState(1);
 
   const perPage = 8;
@@ -84,7 +83,7 @@ export default function ProductsPage() {
         {/* HEADER */}
         <section className="py-12 border-b">
           <div className="max-w-7xl mx-auto px-4 md:px-12">
-            <h1 className="text-4xl font-playfair mb-2">All Products</h1>
+            <h1 className="text-3xl sm:text-4xl font-playfair mb-2">All Products</h1>
             <p className="text-muted-foreground">
               Explore our full catalogue
             </p>
@@ -142,7 +141,7 @@ export default function ProductsPage() {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value)}
-                className="w-40 border rounded-full px-4 py-2"
+                className="w-full sm:w-40 border rounded-full px-4 py-2"
               >
                 {sortOptions.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -196,7 +195,7 @@ export default function ProductsPage() {
 
         {/* BULK CTA */}
         <section className="py-10 border-t">
-          <div className="max-w-7xl mx-auto px-4 md:px-12 flex justify-between items-center">
+          <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
             <div>
               <h3 className="text-xl font-medium">
                 Need bulk orders?

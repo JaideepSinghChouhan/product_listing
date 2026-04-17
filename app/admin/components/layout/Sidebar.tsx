@@ -33,12 +33,29 @@ const navItems = [
 export default function Sidebar({
   active,
   setActive,
+  mobileOpen,
+  onCloseMobile,
 }: {
   active: Section;
   setActive: (val: Section) => void;
+  mobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }) {
   return (
-    <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col">
+    <>
+      {mobileOpen && (
+        <button
+          className="md:hidden fixed inset-0 bg-black/40 z-30"
+          onClick={onCloseMobile}
+          aria-label="Close menu overlay"
+        />
+      )}
+
+      <aside
+        className={`w-64 bg-sidebar border-r border-sidebar-border flex flex-col fixed md:static inset-y-0 left-0 z-40 transform transition-transform duration-200 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        }`}
+      >
       
       {/* Logo */}
       <div className="px-6 h-16 flex items-center border-b border-sidebar-border font-playfair text-xl">
@@ -54,7 +71,10 @@ export default function Sidebar({
           return (
             <button
               key={item.id}
-              onClick={() => setActive(item.id as Section)}
+              onClick={() => {
+                setActive(item.id as Section);
+                onCloseMobile?.();
+              }}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm ${
                 isActive
                   ? "bg-accent/15 text-accent"
@@ -68,6 +88,7 @@ export default function Sidebar({
           );
         })}
       </nav>
-    </aside>
+      </aside>
+    </>
   );
 }

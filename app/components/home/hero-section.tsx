@@ -55,7 +55,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative h-[75vh] sm:h-[85vh] flex items-center overflow-hidden">
+    <section className="relative h-[72vh] sm:h-[80vh] md:h-[85vh] flex items-center overflow-hidden">
 
       {/* BACKGROUND IMAGES */}
       <div className="absolute inset-0">
@@ -70,6 +70,7 @@ export function HeroSection() {
               src={slide.imageUrl}
               alt={slide.heading || "hero"}
               fill
+              sizes="100vw"
               className="object-cover"
               priority={index === 0}
             />
@@ -124,7 +125,7 @@ export function HeroSection() {
       </div>
 
       {/* CONTROLS */}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+      <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-20">
         <button onClick={prevSlide} className="p-2 bg-white/80 rounded-full">
           <ChevronLeft size={16} />
         </button>
@@ -134,7 +135,7 @@ export function HeroSection() {
       </div>
 
       {/* DOTS */}
-      <div className="absolute bottom-5 right-5 flex gap-2">
+      <div className="hidden sm:flex absolute bottom-5 right-5 gap-2">
         {slides.map((_, index) => (
           <button
             key={index}
