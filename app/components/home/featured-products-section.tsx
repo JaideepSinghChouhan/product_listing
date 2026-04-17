@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { FeaturedProductsSkeleton } from "../skeletons";
 
 export function FeaturedProductsSection() {
   const [products, setProducts] = useState<any[]>([]);
@@ -51,7 +52,7 @@ export function FeaturedProductsSection() {
     }
   }, [activeCategory, allProducts]);
 
-  if (loading) return null;
+  if (loading) return <FeaturedProductsSkeleton />;
 
   return (
     <section className="py-10 sm:py-14 md:py-20">

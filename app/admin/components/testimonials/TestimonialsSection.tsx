@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 
 import TestimonialsTable from "./TestimonialsTable";
 import TestimonialForm from "./TestimonialForm";
+import { AdminListSkeleton } from "../../../components/skeletons";
 
 export default function TestimonialsSection() {
   const [data, setData] = useState([]);
@@ -25,7 +26,7 @@ export default function TestimonialsSection() {
     fetchTestimonials();
   }, []);
 
-  if (loading) return null;
+  if (loading) return <AdminListSkeleton titleWidth={180} buttonWidth={180} rows={6} />;
 
   return (
     <div className="flex flex-col gap-6">

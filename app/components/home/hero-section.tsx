@@ -9,6 +9,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { HeroSectionSkeleton } from "../skeletons";
 
 export function HeroSection() {
   const [slides, setSlides] = useState<any[]>([]);
@@ -51,7 +52,7 @@ export function HeroSection() {
     setAutoPlay(false);
   };
 
-  if (loading) return null;
+  if (loading) return <HeroSectionSkeleton />;
 
   if (!slides.length) {
     return null;

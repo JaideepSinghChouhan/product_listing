@@ -6,6 +6,7 @@ import { SiteFooter } from "../components/site-footer";
 import { ProductCard } from "../components/product-card";
 import { Search, MessageCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { ProductsListingSkeleton } from "../components/skeletons";
 
 const sortOptions = [
   { value: "default", label: "Featured" },
@@ -88,7 +89,7 @@ export default function ProductsPageClient() {
   const paged = filtered.slice(0, page * perPage);
   const hasMore = paged.length < filtered.length;
 
-  if (loading) return null;
+  if (loading) return <ProductsListingSkeleton />;
 
   return (
     <div className="min-h-screen bg-background">

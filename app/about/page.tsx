@@ -5,9 +5,11 @@ import { ArrowRight, BadgeCheck, Sparkles, Truck } from "lucide-react";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import img from "@/public/vase.jpg";
+import { AboutSectionSkeleton } from "../components/skeletons";
 
 const AboutSection = dynamic(
   () => import("../components/home/about-section").then((mod) => mod.AboutSection),
+  { loading: () => <AboutSectionSkeleton /> },
 );
 
 const highlights = [

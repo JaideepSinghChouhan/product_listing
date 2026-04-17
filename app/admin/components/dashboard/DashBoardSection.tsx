@@ -6,6 +6,7 @@ import { Package, Inbox, TrendingUp } from "lucide-react";
 import { api } from "@/lib/api";
 import StatCard from "./StatCard";
 import RecentLeads from "./RecentLeads";
+import { DashboardSkeleton } from "../../../components/skeletons";
 
 export default function DashboardSection() {
   const [data, setData] = useState<any>(null);
@@ -23,7 +24,7 @@ export default function DashboardSection() {
     fetchData();
   }, []);
 
-  if (loading) return null;
+  if (loading) return <DashboardSkeleton />;
 
   if (!data) return null;
 

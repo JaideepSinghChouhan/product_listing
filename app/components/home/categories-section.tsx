@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CategoriesSkeleton } from "../skeletons";
 
 export function CategoriesSection() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -22,7 +23,7 @@ export function CategoriesSection() {
     fetchCategories();
   }, []);
 
-  if (loading) return null;
+  if (loading) return <CategoriesSkeleton />;
 
   if (!categories.length) return null;
 

@@ -14,6 +14,7 @@ import {
   Send,
   ZoomIn,
 } from "lucide-react";
+import { ProductDetailSkeleton } from "../../components/skeletons";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -79,7 +80,7 @@ export default function ProductDetailPage({ params}: PageProps) {
     if (id) fetchProduct();
   }, [id]);
 
-  if (loading) return null;
+  if (loading) return <ProductDetailSkeleton />;
 
   if (!product) {
     return (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import LeadsTable from "./LeadsTable";
+import { AdminListSkeleton } from "../../../components/skeletons";
 
 export default function LeadsSection() {
   const [leads, setLeads] = useState([]);
@@ -21,7 +22,7 @@ export default function LeadsSection() {
     fetchLeads();
   }, []);
 
-  if (loading) return null;
+  if (loading) return <AdminListSkeleton titleWidth={120} buttonWidth={0} rows={8} />;
 
   return (
     <div className="flex flex-col gap-6">

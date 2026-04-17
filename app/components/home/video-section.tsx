@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { VideoSectionSkeleton } from "../skeletons";
 
 function useCardsPerView() {
 	const [cardsPerView, setCardsPerView] = useState(4);
@@ -62,7 +63,7 @@ export function VideoSection() {
 		}
 	}, [currentIndex, maxIndex]);
 
-	if (loading) return null;
+	if (loading) return <VideoSectionSkeleton />;
 
 	if (!videos.length) return null;
 

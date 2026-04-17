@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 
 import CategoriesTable from "./CategoriesTable";
 import CategoryForm from "./CategoryForm";
+import { AdminListSkeleton } from "../../../components/skeletons";
 
 export default function CategoriesSection() {
   const [categories, setCategories] = useState([]);
@@ -25,7 +26,7 @@ export default function CategoriesSection() {
     fetchCategories();
   }, []);
 
-  if (loading) return null;
+  if (loading) return <AdminListSkeleton titleWidth={160} buttonWidth={160} rows={6} />;
 
   return (
     <div className="flex flex-col gap-6">

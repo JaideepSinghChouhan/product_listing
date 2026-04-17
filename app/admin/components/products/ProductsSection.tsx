@@ -5,6 +5,7 @@ import { Plus, Search } from "lucide-react";
 import ProductForm from "./ProductForm";
 import { api } from "@/lib/api";
 import ProductsTable from "./ProductsTable";
+import { AdminListSkeleton } from "../../../components/skeletons";
 
 export default function ProductsSection() {
   const [products, setProducts] = useState<any[]>([]);
@@ -35,7 +36,7 @@ export default function ProductsSection() {
   );
 });
 
-  if (loading) return null;
+  if (loading) return <AdminListSkeleton titleWidth={220} buttonWidth={160} rows={6} />;
 
   return (
     <div className="flex flex-col gap-6">

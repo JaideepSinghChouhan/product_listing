@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { ContactSectionSkeleton } from "../skeletons";
 
 export function ContactSection() {
   const [data, setData] = useState<any>(null);
@@ -74,7 +75,7 @@ export function ContactSection() {
     }
   };
 
-  if (loadingContact) return null;
+  if (loadingContact) return <ContactSectionSkeleton />;
 
   if (!data) return null;
 
