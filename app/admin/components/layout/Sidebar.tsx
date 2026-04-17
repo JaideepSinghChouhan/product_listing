@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import {
   LayoutDashboard,
   Package,
@@ -11,6 +12,7 @@ import {
   Mail,
   ChevronRight,
 } from "lucide-react";
+import logo from "@/public/logo-bg.png";
 
 type Section =
   | "dashboard"
@@ -61,8 +63,23 @@ export default function Sidebar({
       >
       
       {/* Logo */}
-      <div className="px-6 h-16 flex items-center border-b border-sidebar-border font-playfair text-xl">
-        Lux<span className="text-accent">ora</span>
+      <div className="px-4 h-16 flex items-center gap-3 border-b border-sidebar-border">
+        <div className="relative w-10 h-10 shrink-0">
+          <Image
+            src={logo}
+            alt="PR Associates"
+            fill
+            sizes="40px"
+            className="object-contain"
+            loading="lazy"
+          />
+        </div>
+        <div className="leading-tight">
+          <p className="font-playfair text-base">PR Associates</p>
+          <p className="text-[10px] tracking-[0.22em] text-muted-foreground uppercase">
+            Admin
+          </p>
+        </div>
       </div>
 
       {/* Nav */}

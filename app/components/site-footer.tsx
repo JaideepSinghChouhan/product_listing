@@ -21,7 +21,7 @@ export function SiteFooter() {
             <div className="relative w-32 h-20">
               <Image
                 src={logo}
-                alt="logo"
+                alt="PR Associates"
                 fill
                 sizes="128px"
                 className="object-contain"
@@ -30,16 +30,15 @@ export function SiteFooter() {
             </div>
 
             <p className="text-sm font-medium">
-              Charming Finds & Delightful Livings
+              PR Associates
             </p>
 
             <p className="text-sm text-muted-foreground">
-              All our products are exclusively imported to ensure premium
-              quality and global standards.
+              Premium corporate gifting, custom branding, and bulk order support.
             </p>
 
             <p className="text-sm">
-              Email: <span className="font-medium">info@yourbrand.com</span>
+              Email: <span className="font-medium">info@prassociates.com</span>
             </p>
 
             <p className="text-sm">
@@ -59,8 +58,8 @@ export function SiteFooter() {
           <div className="sm:justify-self-end md:justify-self-auto">
             <h3 className="font-medium mb-4">Brand</h3>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="#">About Us</Link>
-              <Link href="#">Contact Us</Link>
+              <Link href="/about">About Us</Link>
+              <Link href="/contact">Contact Us</Link>
             </div>
           </div>
 
@@ -80,7 +79,7 @@ export function SiteFooter() {
         {/* DIVIDER */}
         <div className="border-t mt-10 pt-6 text-center text-sm text-muted-foreground">
 
-          © 2025 Your Brand. All rights reserved. ❤️
+          © 2025 PR Associates. All rights reserved.
 
         </div>
 

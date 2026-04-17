@@ -3,23 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MessageCircle, Menu, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import logo from "@/public/logo-bg.png";
 
 export function SiteHeader() {
-  const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
-
-  // 🔥 SCROLL TO SECTION HANDLER
-  const handleScroll = (id: string) => {
-    if (window.location.pathname !== "/") {
-      router.push(`/#${id}`);
-    } else {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <header className="w-full border-b">
@@ -82,12 +70,12 @@ export function SiteHeader() {
           </a>
 
           {/* Enquire */}
-          <button
-            onClick={() => handleScroll("contact")}
+          <Link
+            href="/contact"
             className="px-3 sm:px-5 py-2 bg-black text-white rounded-full text-xs sm:text-sm"
           >
             Enquire
-          </button>
+          </Link>
 
           <button
             onClick={() => setMobileOpen((prev) => !prev)}
