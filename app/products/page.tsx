@@ -6,7 +6,6 @@ import { SiteFooter } from "../components/site-footer";
 import { ProductCard } from "../components/product-card";
 import { Search, MessageCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
-import Skeleton from "react-loading-skeleton";
 
 const sortOptions = [
   { value: "default", label: "Featured" },
@@ -91,6 +90,8 @@ export default function ProductsPage() {
   const paged = filtered.slice(0, page * perPage);
   const hasMore = paged.length < filtered.length;
 
+  if (loading) return null;
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -169,22 +170,11 @@ export default function ProductsPage() {
 
             {/* COUNT */}
             <p className="text-sm mb-4">
-              {loading ? "Loading products..." : `Showing ${paged.length} of ${filtered.length} products`}
+              Showing {paged.length} of {filtered.length} products
             </p>
 
             {/* GRID */}
-            {loading ? (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {Array.from({ length: 8 }).map((_, index) => (
-                  <div key={index} className="border rounded-xl overflow-hidden">
-                    <Skeleton className="h-48" />
-                    <div className="p-3">
-                      <Skeleton height={16} />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : paged.length > 0 ? (
+            {paged.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {paged.map((product) => (
                   <ProductCard
@@ -207,7 +197,7 @@ export default function ProductsPage() {
             )}
 
             {/* LOAD MORE */}
-            {!loading && hasMore && (
+            {hasMore && (
               <div className="text-center mt-10">
                 <button
                   onClick={() => setPage((p) => p + 1)}

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
-import Skeleton from "react-loading-skeleton";
 import { api } from "@/lib/api";
 
 import CategoriesTable from "./CategoriesTable";
@@ -26,21 +25,7 @@ export default function CategoriesSection() {
     fetchCategories();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
-          <Skeleton width={180} height={28} />
-          <Skeleton className="w-full sm:w-[160px] h-10 rounded" />
-        </div>
-        <div className="border rounded-xl overflow-hidden">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 border-b last:border-b-0" />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="flex flex-col gap-6">

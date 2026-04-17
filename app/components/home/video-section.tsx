@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Play } from "lucide-react";
-import Skeleton from "react-loading-skeleton";
 
 function useCardsPerView() {
 	const [cardsPerView, setCardsPerView] = useState(4);
@@ -63,23 +62,7 @@ export function VideoSection() {
 		}
 	}, [currentIndex, maxIndex]);
 
-	if (loading) {
-		return (
-			<section className="py-12 sm:py-16 md:py-20">
-				<div className="px-4 sm:px-6 md:px-12 mb-8 text-center">
-					<Skeleton width={120} height={12} className="mx-auto mb-4" />
-					<Skeleton width={360} height={36} className="mx-auto mb-3" />
-					<Skeleton width={480} height={14} className="mx-auto" />
-				</div>
-
-				<div className="px-4 sm:px-6 md:px-12 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-					{Array.from({ length: 4 }).map((_, index) => (
-						<Skeleton key={index} className="rounded-[28px] aspect-[9/16]" />
-					))}
-				</div>
-			</section>
-		);
-	}
+	if (loading) return null;
 
 	if (!videos.length) return null;
 

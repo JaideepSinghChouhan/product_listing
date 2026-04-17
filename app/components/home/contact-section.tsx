@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
-import Skeleton from "react-loading-skeleton";
 
 export function ContactSection() {
   const [data, setData] = useState<any>(null);
@@ -75,39 +74,7 @@ export function ContactSection() {
     }
   };
 
-  if (loadingContact) {
-    return (
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-elevated">
-        <div className="text-center mb-12 px-4">
-          <Skeleton width={90} height={12} className="mx-auto mb-3" />
-          <Skeleton width={180} height={36} className="mx-auto mb-3" />
-          <Skeleton width={420} height={14} className="mx-auto" />
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6 px-4 sm:px-6 md:px-12 max-w-6xl mx-auto">
-          <div className="flex flex-col gap-4">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Skeleton key={index} className="h-[72px] rounded-xl" />
-            ))}
-          </div>
-
-          <div className="border rounded-xl p-6 bg-background flex flex-col gap-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Skeleton height={46} borderRadius={10} />
-              <Skeleton height={46} borderRadius={10} />
-            </div>
-            <Skeleton height={46} borderRadius={10} />
-            <Skeleton height={46} borderRadius={10} />
-            <Skeleton height={140} borderRadius={10} />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Skeleton height={46} borderRadius={999} />
-              <Skeleton height={46} borderRadius={999} />
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  if (loadingContact) return null;
 
   if (!data) return null;
 

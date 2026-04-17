@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
 
 export function CategoriesSection() {
   const [categories, setCategories] = useState<any[]>([]);
@@ -23,22 +22,7 @@ export function CategoriesSection() {
     fetchCategories();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="py-10 sm:py-14 md:py-20">
-        <div className="px-4 sm:px-6 md:px-12 mb-6 sm:mb-10 flex flex-col items-center">
-          <Skeleton width={220} height={30} className="mb-2" />
-          <Skeleton width={280} height={14} />
-        </div>
-
-        <div className="px-4 sm:px-6 md:px-12 grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <Skeleton key={index} className="h-28 sm:h-36 rounded-xl" />
-          ))}
-        </div>
-      </section>
-    );
-  }
+  if (loading) return null;
 
   if (!categories.length) return null;
 

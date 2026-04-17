@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
 
 export function FeaturedProductsSection() {
   const [products, setProducts] = useState<any[]>([]);
@@ -52,34 +51,7 @@ export function FeaturedProductsSection() {
     }
   }, [activeCategory, allProducts]);
 
-  if (loading) {
-    return (
-      <section className="py-10 sm:py-14 md:py-20">
-        <div className="px-4 sm:px-6 md:px-12 mb-6 sm:mb-8">
-          <div className="text-center">
-            <Skeleton width={260} height={34} className="mx-auto" />
-          </div>
-
-          <div className="flex justify-center gap-3 mt-4 flex-wrap">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Skeleton key={index} width={84} height={32} borderRadius={999} />
-            ))}
-          </div>
-        </div>
-
-        <div className="px-4 sm:px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.from({ length: 8 }).map((_, index) => (
-            <div key={index} className="border rounded-xl overflow-hidden">
-              <Skeleton className="h-36 sm:h-48 md:h-52" />
-              <div className="p-3">
-                <Skeleton height={16} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-    );
-  }
+  if (loading) return null;
 
   return (
     <section className="py-10 sm:py-14 md:py-20">

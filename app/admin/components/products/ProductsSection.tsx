@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
-import Skeleton from "react-loading-skeleton";
 import ProductForm from "./ProductForm";
 import { api } from "@/lib/api";
 import ProductsTable from "./ProductsTable";
@@ -36,21 +35,7 @@ export default function ProductsSection() {
   );
 });
 
-  if (loading) {
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
-          <Skeleton className="w-full sm:w-[260px] h-10 rounded-lg" />
-          <Skeleton className="w-full sm:w-[160px] h-10 rounded-lg" />
-        </div>
-        <div className="border rounded-xl overflow-hidden">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <Skeleton key={i} className="h-12 border-b last:border-b-0" />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  if (loading) return null;
 
   return (
     <div className="flex flex-col gap-6">

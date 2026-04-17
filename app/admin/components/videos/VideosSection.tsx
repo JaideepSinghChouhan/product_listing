@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Trash2, Upload } from "lucide-react";
-import Skeleton from "react-loading-skeleton";
 import { api } from "@/lib/api";
 
 function fileToDataUrl(file: File) {
@@ -191,67 +190,61 @@ export default function VideosSection() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {loading ? (
-              Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="rounded-2xl aspect-[9/16]" />
-              ))
-            ) : (
-              videos.map((video) => (
-                <div key={video.id} className="border rounded-2xl overflow-hidden bg-background">
-                  <div className="relative aspect-[9/16] bg-black">
-                  {video.thumbnailUrl ? (
+            {videos.map((video) => (
+              <div key={video.id} className="border rounded-2xl overflow-hidden bg-background">
+                <div className="relative aspect-[9/16] bg-black">
+                {video.thumbnailUrl ? (
+                  <img
+                    src={video.thumbnailUrl}
+                    alt={video.title}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <video
+                    src={video.url}
+                    poster={video.thumbnailUrl || undefined}
+                    className="w-full h-full object-cover"
+                    muted
+                    playsInline
+                  />
+                )}
+                <div className="absolute inset-0 bg-black/10" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-end gap-3">
+                  {video.thumbnailUrl && (
                     <img
                       src={video.thumbnailUrl}
-                      alt={video.title}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <video
-                      src={video.url}
-                      poster={video.thumbnailUrl || undefined}
-                      className="w-full h-full object-cover"
-                      muted
-                      playsInline
+                      alt="thumb"
+                      className="w-11 h-11 rounded-lg object-cover border border-white/60 shadow-sm"
                     />
                   )}
-                  <div className="absolute inset-0 bg-black/10" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-end gap-3">
-                    {video.thumbnailUrl && (
-                      <img
-                        src={video.thumbnailUrl}
-                        alt="thumb"
-                        className="w-11 h-11 rounded-lg object-cover border border-white/60 shadow-sm"
-                      />
-                    )}
-                    <div className="min-w-0 flex-1">
-                      <p className="text-white text-sm font-medium truncate">
-                        {video.title}
-                      </p>
-                      <p className="text-white/80 text-xs truncate">
-                        Portrait video
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-4 flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">
-                      URL
+                  <div className="min-w-0 flex-1">
+                    <p className="text-white text-sm font-medium truncate">
+                      {video.title}
                     </p>
-                    <p className="text-sm truncate">{video.url}</p>
+                    <p className="text-white/80 text-xs truncate">
+                      Portrait video
+                    </p>
                   </div>
-                  <button
-                    onClick={() => handleDelete(video.id)}
-                    className="p-2 rounded-lg hover:bg-accent/10"
-                    disabled={loading}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
+              </div>
+
+              <div className="p-4 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">
+                    URL
+                  </p>
+                  <p className="text-sm truncate">{video.url}</p>
                 </div>
-              ))
-            )}
+                <button
+                  onClick={() => handleDelete(video.id)}
+                  className="p-2 rounded-lg hover:bg-accent/10"
+                  disabled={loading}
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              </div>
+            ))}
           </div>
 
           {!loading && !videos.length && (
