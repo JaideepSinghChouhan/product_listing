@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 import { api } from "@/lib/api";
 
 import TestimonialsTable from "./TestimonialsTable";
@@ -10,15 +11,36 @@ import TestimonialForm from "./TestimonialForm";
 export default function TestimonialsSection() {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchTestimonials = async () => {
-    const res = await api("/testimonials");
-    setData(res);
+    try {
+      const res = await api("/testimonials");
+      setData(res);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchTestimonials();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
+          <Skeleton width={140} height={28} />
+          <Skeleton className="w-full sm:w-[180px] h-10 rounded" />
+        </div>
+        <div className="border rounded-xl overflow-hidden">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 border-b last:border-b-0" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

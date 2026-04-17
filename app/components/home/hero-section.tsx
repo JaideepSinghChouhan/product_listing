@@ -9,18 +9,24 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import Skeleton from "react-loading-skeleton";
 
 export function HeroSection() {
   const [slides, setSlides] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
 
   // FETCH
   useEffect(() => {
     const fetchHero = async () => {
-      const res = await fetch("/api/hero");
-      const data = await res.json();
-      setSlides(data || []);
+      try {
+        const res = await fetch("/api/hero");
+        const data = await res.json();
+        setSlides(data || []);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchHero();
   }, []);
@@ -46,12 +52,27 @@ export function HeroSection() {
     setAutoPlay(false);
   };
 
-  if (!slides.length) {
+  if (loading) {
     return (
-      <section className="h-[60vh] flex items-center justify-center text-sm">
-        Loading...
+      <section className="relative h-[72vh] sm:h-[80vh] md:h-[85vh] overflow-hidden">
+        <Skeleton className="absolute inset-0 h-full" />
+        <div className="relative z-10 w-full h-full px-5 sm:px-6 md:px-12 flex items-center">
+          <div className="w-full max-w-xl">
+            <Skeleton width={120} height={12} className="mb-4" />
+            <Skeleton width="90%" height={52} className="mb-3" />
+            <Skeleton width="75%" height={16} className="mb-8" />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Skeleton width={140} height={44} borderRadius={999} />
+              <Skeleton width={160} height={44} borderRadius={999} />
+            </div>
+          </div>
+        </div>
       </section>
     );
+  }
+
+  if (!slides.length) {
+    return null;
   }
 
   return (

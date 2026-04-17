@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 
 export function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -19,11 +21,34 @@ export function TestimonialsSection() {
         setTestimonials(arr);
       } catch (err) {
         console.error("Testimonials fetch error:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchTestimonials();
   }, []);
+
+  if (loading) {
+    return (
+      <section className="py-12 sm:py-16 md:py-20 bg-surface-elevated">
+        <div className="text-center mb-12 px-4">
+          <Skeleton width={340} height={34} className="mx-auto" />
+          <Skeleton width={280} height={14} className="mx-auto mt-3" />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 sm:px-6 md:px-12">
+          {Array.from({ length: 4 }).map((_, index) => (
+            <div key={index} className="bg-background border rounded-xl p-6">
+              <Skeleton width="60%" height={16} className="mx-auto mb-4" />
+              <Skeleton width="45%" height={16} className="mx-auto mb-3" />
+              <Skeleton count={3} />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   if (!testimonials.length) return null;
 

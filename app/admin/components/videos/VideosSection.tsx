@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Trash2, Upload } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 import { api } from "@/lib/api";
 
 function fileToDataUrl(file: File) {
@@ -19,13 +20,17 @@ export default function VideosSection() {
   const [videoUrl, setVideoUrl] = useState("");
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   const fetchVideos = async () => {
-    const res = await fetch("/api/videos");
-    const data = await res.json();
-    setVideos(Array.isArray(data) ? data : []);
+    try {
+      const res = await fetch("/api/videos");
+      const data = await res.json();
+      setVideos(Array.isArray(data) ? data : []);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -186,9 +191,14 @@ export default function VideosSection() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {videos.map((video) => (
-              <div key={video.id} className="border rounded-2xl overflow-hidden bg-background">
-                <div className="relative aspect-[9/16] bg-black">
+            {loading ? (
+              Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="rounded-2xl aspect-[9/16]" />
+              ))
+            ) : (
+              videos.map((video) => (
+                <div key={video.id} className="border rounded-2xl overflow-hidden bg-background">
+                  <div className="relative aspect-[9/16] bg-black">
                   {video.thumbnailUrl ? (
                     <img
                       src={video.thumbnailUrl}
@@ -239,11 +249,12 @@ export default function VideosSection() {
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-              </div>
-            ))}
+                </div>
+              ))
+            )}
           </div>
 
-          {!videos.length && (
+          {!loading && !videos.length && (
             <div className="border rounded-2xl p-10 text-center text-sm text-muted-foreground">
               No videos uploaded yet.
             </div>

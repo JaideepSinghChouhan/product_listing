@@ -13,8 +13,8 @@ import {
   CheckCircle,
   Send,
   ZoomIn,
-  Phone
 } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -33,6 +33,7 @@ export default function ProductDetailPage({ params}: PageProps) {
   const { id } = use(params);
 
   const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [related, setRelated] = useState<any[]>([]);
   const [activeImage, setActiveImage] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -71,6 +72,8 @@ export default function ProductDetailPage({ params}: PageProps) {
         );
       } catch (err) {
         console.error("Error fetching product:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -78,6 +81,50 @@ export default function ProductDetailPage({ params}: PageProps) {
   }, [id]);
 
   // ✅ LOADING STATE
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <SiteHeader />
+
+        <main>
+          <section className="max-w-7xl mx-auto px-4 md:px-12 py-8 md:py-12">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              <div>
+                <Skeleton className="aspect-square rounded-xl" />
+                <div className="flex gap-2 mt-4">
+                  {Array.from({ length: 4 }).map((_, index) => (
+                    <Skeleton key={index} width={64} height={64} borderRadius={8} />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <Skeleton width={120} height={12} className="mb-3" />
+                <Skeleton width="70%" height={42} className="mb-3" />
+                <Skeleton width={180} height={12} className="mb-4" />
+                <Skeleton count={3} className="mb-2" />
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-6">
+                  <Skeleton height={46} borderRadius={999} />
+                  <Skeleton height={46} borderRadius={999} />
+                  <Skeleton height={46} borderRadius={999} />
+                </div>
+
+                <div className="border rounded-xl p-4">
+                  {Array.from({ length: 6 }).map((_, index) => (
+                    <Skeleton key={index} height={16} className="mb-3 last:mb-0" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <SiteFooter />
+      </div>
+    );
+  }
+
   if (!product) {
     return (
       <div className="min-h-screen flex items-center justify-center">

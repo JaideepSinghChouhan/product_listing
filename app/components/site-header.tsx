@@ -39,6 +39,7 @@ export function SiteHeader() {
             alt="PR Associates"
             width={42}
             height={42}
+            sizes="42px"
             className="object-contain"
           />
           <div className="leading-tight">

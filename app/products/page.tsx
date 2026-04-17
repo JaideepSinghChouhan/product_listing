@@ -5,6 +5,8 @@ import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import { ProductCard } from "../components/product-card";
 import { Search, MessageCircle } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import Skeleton from "react-loading-skeleton";
 
 const sortOptions = [
   { value: "default", label: "Featured" },
@@ -13,8 +15,10 @@ const sortOptions = [
 ];
 
 export default function ProductsPage() {
+  const searchParams = useSearchParams();
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -43,11 +47,23 @@ export default function ProductsPage() {
         setCategories(cData || []);
       } catch (err) {
         console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const categoryFromQuery =
+      searchParams.get("category") || searchParams.get("categoryId");
+
+    if (categoryFromQuery) {
+      setActiveCategory(categoryFromQuery);
+      setPage(1);
+    }
+  }, [searchParams]);
 
   // 🔥 FILTER LOGIC
   const filtered = useMemo(() => {
@@ -153,11 +169,22 @@ export default function ProductsPage() {
 
             {/* COUNT */}
             <p className="text-sm mb-4">
-              Showing {paged.length} of {filtered.length} products
+              {loading ? "Loading products..." : `Showing ${paged.length} of ${filtered.length} products`}
             </p>
 
             {/* GRID */}
-            {paged.length > 0 ? (
+            {loading ? (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {Array.from({ length: 8 }).map((_, index) => (
+                  <div key={index} className="border rounded-xl overflow-hidden">
+                    <Skeleton className="h-48" />
+                    <div className="p-3">
+                      <Skeleton height={16} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : paged.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {paged.map((product) => (
                   <ProductCard
@@ -180,7 +207,7 @@ export default function ProductsPage() {
             )}
 
             {/* LOAD MORE */}
-            {hasMore && (
+            {!loading && hasMore && (
               <div className="text-center mt-10">
                 <button
                   onClick={() => setPage((p) => p + 1)}

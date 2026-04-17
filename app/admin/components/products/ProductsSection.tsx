@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
+import Skeleton from "react-loading-skeleton";
 import ProductForm from "./ProductForm";
 import { api } from "@/lib/api";
 import ProductsTable from "./ProductsTable";
@@ -9,11 +10,16 @@ import ProductsTable from "./ProductsTable";
 export default function ProductsSection() {
   const [products, setProducts] = useState<any[]>([]);
   const [search, setSearch] = useState("");
-  const [open, setOpen] = useState(false);  
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);  
 
   const fetchProducts = async () => {
-    const data = await api("/products/admin"); // admin route
-    setProducts(Array.isArray(data) ? data : []);
+    try {
+      const data = await api("/products/admin"); // admin route
+      setProducts(Array.isArray(data) ? data : []);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -29,6 +35,22 @@ export default function ProductsSection() {
     sku.toLowerCase().includes(search.toLowerCase())
   );
 });
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center">
+          <Skeleton className="w-full sm:w-[260px] h-10 rounded-lg" />
+          <Skeleton className="w-full sm:w-[160px] h-10 rounded-lg" />
+        </div>
+        <div className="border rounded-xl overflow-hidden">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-12 border-b last:border-b-0" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

@@ -8,7 +8,8 @@ import { TrustSection } from "./components/home/trust-section"
 import { AboutSection } from "./components/home/about-section"
 import { TestimonialsSection } from "./components/home/testimonials-section"
 import { VideoSection } from "./components/home/video-section"
-import { LeadCaptureSection } from "./components/home/lead-capture-section"
+import { ProductsCtaSection } from "./components/home/products-cta-section.tsx"
+// import { LeadCaptureSection } from "./components/home/lead-capture-section"
 import { ContactSection } from "./components/home/contact-section"
 
 export default function HomePage() {
@@ -19,12 +20,13 @@ export default function HomePage() {
         <HeroSection />
         <CategoriesSection />
         <FeaturedProductsSection />
-        <TrustSection />
+        {/* <TrustSection /> */}
         {/* <BulkSection /> */}
         <AboutSection />
-        <TestimonialsSection />
         <VideoSection />
-        <LeadCaptureSection />
+        <ProductsCtaSection />
+        <TestimonialsSection />
+        {/* <LeadCaptureSection /> */}
         <ContactSection />
       </main>
       <SiteFooter />

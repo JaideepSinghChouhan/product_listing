@@ -3,36 +3,41 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Skeleton from "react-loading-skeleton";
 
 export function FeaturedProductsSection() {
   const [products, setProducts] = useState<any[]>([]);
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
   // 🔥 FETCH
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch("/api/products");
-      const data = await res.json();
+      try {
+        const [productsRes, categoriesRes] = await Promise.all([
+          fetch("/api/products"),
+          fetch("/api/categories"),
+        ]);
 
-      const productsArray = Array.isArray(data)
-        ? data
-        : data?.data || [];
+        const [productsData, categoriesData] = await Promise.all([
+          productsRes.json(),
+          categoriesRes.json(),
+        ]);
 
-      setAllProducts(productsArray);
-      setProducts(productsArray.slice(0, 8));
+        const productsArray = Array.isArray(productsData)
+          ? productsData
+          : productsData?.data || [];
+
+        setAllProducts(productsArray);
+        setProducts(productsArray.slice(0, 8));
+        setCategories(Array.isArray(categoriesData) ? categoriesData.slice(0, 6) : []);
+      } finally {
+        setLoading(false);
+      }
     };
-
-    const fetchCategories = async () => {
-      const res = await fetch("/api/categories");
-      const data = await res.json();
-      
-      setCategories(Array.isArray(data) ? data.slice(0, 6) : []);
-    };
-
     fetchProducts();
-    fetchCategories();
   }, []);
 
   // 🔥 FILTER
@@ -46,6 +51,35 @@ export function FeaturedProductsSection() {
       setProducts(filtered.slice(0, 8));
     }
   }, [activeCategory, allProducts]);
+
+  if (loading) {
+    return (
+      <section className="py-10 sm:py-14 md:py-20">
+        <div className="px-4 sm:px-6 md:px-12 mb-6 sm:mb-8">
+          <div className="text-center">
+            <Skeleton width={260} height={34} className="mx-auto" />
+          </div>
+
+          <div className="flex justify-center gap-3 mt-4 flex-wrap">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Skeleton key={index} width={84} height={32} borderRadius={999} />
+            ))}
+          </div>
+        </div>
+
+        <div className="px-4 sm:px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <div key={index} className="border rounded-xl overflow-hidden">
+              <Skeleton className="h-36 sm:h-48 md:h-52" />
+              <div className="p-3">
+                <Skeleton height={16} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-10 sm:py-14 md:py-20">
