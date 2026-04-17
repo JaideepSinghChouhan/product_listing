@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { ContactSectionSkeleton } from "../skeletons";
+import { getGoogleMapsEmbedUrl } from "@/lib/maps";
 
 export function ContactSection() {
   const [data, setData] = useState<any>(null);
@@ -79,6 +80,8 @@ export function ContactSection() {
 
   if (!data) return null;
 
+  const mapSrc = getGoogleMapsEmbedUrl(data.mapUrl, data.address);
+
   return (
     <section className="py-12 sm:py-16 md:py-20 bg-surface-elevated">
 
@@ -145,9 +148,12 @@ export function ContactSection() {
           {/* MAP (LEFT SIDE BOTTOM ✅) */}
           <div className="border rounded-xl overflow-hidden h-[220px]">
             <iframe
-              src={data.mapUrl}
+              src={mapSrc}
+              title="Business location map"
               className="w-full h-full border-0"
               loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
             />
           </div>
 

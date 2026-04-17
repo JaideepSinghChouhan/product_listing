@@ -34,6 +34,7 @@ export default function ProductDetailPage({ params}: PageProps) {
 
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
   const [related, setRelated] = useState<any[]>([]);
   const [activeImage, setActiveImage] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -53,7 +54,20 @@ export default function ProductDetailPage({ params}: PageProps) {
     const fetchProduct = async () => {
       try { 
         const res = await fetch(`/api/products/${id}`);
+        if (res.status === 404) {
+          setNotFound(true);
+          return;
+        }
+
+        if (!res.ok) {
+          throw new Error("Failed to load product");
+        }
+
         const data = await res.json();
+        if (!data) {
+          setNotFound(true);
+          return;
+        }
 
         setProduct(data);
 
@@ -72,6 +86,7 @@ export default function ProductDetailPage({ params}: PageProps) {
         );
       } catch (err) {
         console.error("Error fetching product:", err);
+        setNotFound(true);
       } finally {
         setLoading(false);
       }
@@ -82,10 +97,48 @@ export default function ProductDetailPage({ params}: PageProps) {
 
   if (loading) return <ProductDetailSkeleton />;
 
+  if (notFound) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <SiteHeader />
+        <main className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center max-w-md">
+            <h1 className="text-2xl md:text-3xl font-playfair mb-3">Product not found</h1>
+            <p className="text-sm text-gray-500 mb-6">
+              The product you are looking for does not exist or may have been removed.
+            </p>
+            <Link
+              href="/products"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-black text-white"
+            >
+              Back to Products
+            </Link>
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-sm text-gray-500">Loading product...</p>
+      <div className="min-h-screen bg-background flex flex-col">
+        <SiteHeader />
+        <main className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center max-w-md">
+            <h1 className="text-2xl md:text-3xl font-playfair mb-3">Product not found</h1>
+            <p className="text-sm text-gray-500 mb-6">
+              The product you are looking for does not exist or may have been removed.
+            </p>
+            <Link
+              href="/products"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-black text-white"
+            >
+              Back to Products
+            </Link>
+          </div>
+        </main>
+        <SiteFooter />
       </div>
     );
   }

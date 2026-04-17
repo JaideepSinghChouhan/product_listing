@@ -10,6 +10,9 @@ export async function GET(req: Request, { params }: any) {
       category: true,
     },
   });
+  if (!product) {
+    return NextResponse.json({ error: "Product not found" }, { status: 404 });
+  }
   return NextResponse.json(product);
 }
 

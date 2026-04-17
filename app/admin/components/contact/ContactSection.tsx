@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Save, MapPin, Phone, Mail, Link as LinkIcon } from "lucide-react";
 import { api } from "@/lib/api";
+import { getGoogleMapsEmbedUrl } from "@/lib/maps";
 
 type ContactFormState = {
   address: string;
@@ -79,6 +80,8 @@ export default function ContactSection() {
     );
   }
 
+  const mapPreviewSrc = getGoogleMapsEmbedUrl(form.mapUrl, form.address || "Jaipur, India");
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -138,13 +141,13 @@ export default function ContactSection() {
             <label className="grid gap-2 text-sm">
               <span className="flex items-center gap-2 font-medium">
                 <LinkIcon className="w-4 h-4" />
-                Google Map URL
+                Google Maps Embed URL
               </span>
               <input
                 value={form.mapUrl}
                 onChange={(e) => updateField("mapUrl", e.target.value)}
                 className="border rounded-xl px-4 py-3 bg-surface text-sm"
-                placeholder="Embedded map URL"
+                placeholder="Paste a Google Maps link or embed URL"
               />
             </label>
           </div>
@@ -205,6 +208,17 @@ export default function ContactSection() {
               <p className="break-all text-xs text-muted-foreground">
                 {form.mapUrl || "No map URL set"}
               </p>
+            </div>
+
+            <div className="rounded-xl border bg-background overflow-hidden">
+              <iframe
+                src={mapPreviewSrc}
+                title="Contact map preview"
+                className="h-64 w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
             </div>
           </div>
         </div>
