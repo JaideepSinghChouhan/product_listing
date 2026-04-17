@@ -9,7 +9,7 @@ export interface Product {
   id: string;
   name: string;
   images?: { url: string }[];
-  category?: { name: string };
+  category?: { name: string } | string;
   sku: string;
   description?: string;
   customization?: string;
@@ -24,6 +24,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const imageUrl =
     product.images?.[0]?.url || "/placeholder.png";
+  const categoryName =
+    typeof product.category === "string"
+      ? product.category
+      : product.category?.name || "General";
 
   return (
     <div
@@ -80,7 +84,7 @@ export function ProductCard({ product }: ProductCardProps) {
       {/* INFO */}
       <div className="p-4">
         <p className="text-xs uppercase text-gray-500 mb-1">
-          {product.category?.name || "General"}
+          {categoryName}
         </p>
 
         <h3 className="text-sm font-medium line-clamp-2">

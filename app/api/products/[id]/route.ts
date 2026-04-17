@@ -6,6 +6,9 @@ export async function GET(req: Request, { params }: any) {
   const { id } = await params;
   const product = await prisma.product.findUnique({
     where: { id },
+    include: {
+      category: true,
+    },
   });
   return NextResponse.json(product);
 }

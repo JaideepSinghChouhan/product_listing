@@ -27,7 +27,7 @@ export function FeaturedProductsSection() {
     const fetchCategories = async () => {
       const res = await fetch("/api/categories");
       const data = await res.json();
-
+      console.log("Fetched categories:", data);
       setCategories(Array.isArray(data) ? data.slice(0, 6) : []);
     };
 

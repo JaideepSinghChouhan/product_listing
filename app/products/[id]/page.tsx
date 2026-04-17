@@ -13,7 +13,7 @@ import {
   CheckCircle,
   Send,
   ZoomIn,
-  Phone,
+  Phone
 } from "lucide-react";
 
 interface PageProps {
@@ -36,6 +36,8 @@ export default function ProductDetailPage({ params}: PageProps) {
   const [related, setRelated] = useState<any[]>([]);
   const [activeImage, setActiveImage] = useState(0);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const [form, setForm] = useState({
     name: "",
@@ -55,9 +57,7 @@ export default function ProductDetailPage({ params}: PageProps) {
         setProduct(data);
 
         // related products (same category)
-        const relRes = await fetch(
-          `/api/products?id=${data.categoryId}`
-        );
+        const relRes = await fetch(`/api/products?categoryId=${data.categoryId}&limit=8`);
         const relData = await relRes.json();
         console.log("Related products data:", relData.data); 
         const relProducts = Array.isArray(relData.data)
@@ -218,54 +218,188 @@ export default function ProductDetailPage({ params}: PageProps) {
         </section>
 
         {/* 🔥 ENQUIRY FORM */}
-        <section id="enquiry-form" className="py-12 px-4">
+        <section id="enquiry-form" className="py-14 sm:py-16 px-4 bg-surface-elevated border-t">
           <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <p className="text-xs tracking-[0.28em] uppercase text-foreground-muted inline-flex items-center gap-3">
+                <span className="w-10 h-px bg-border" />
+                Enquire
+                <span className="w-10 h-px bg-border" />
+              </p>
 
-            <h2 className="text-2xl font-serif text-center mb-6">
-              Request Information
-            </h2>
+              <h2 className="text-3xl sm:text-4xl font-playfair mt-3">
+                Request Information
+              </h2>
+
+              <p className="text-foreground-muted text-sm mt-2">
+                Pre-filled with this product&apos;s details. We&apos;ll get back to you within 24 hours.
+              </p>
+            </div>
 
             {submitted ? (
-              <div className="text-center">
-                <p>Enquiry Submitted ✅</p>
+              <div className="border rounded-2xl bg-surface p-10 sm:p-14 text-center flex flex-col items-center justify-center min-h-[300px]">
+                <div className="w-14 h-14 rounded-full bg-secondary flex items-center justify-center mb-6">
+                  <Send className="w-6 h-6 text-foreground" />
+                </div>
+
+                <h3 className="font-playfair text-4xl mb-2">Enquiry Submitted</h3>
+
+                <p className="text-foreground-muted text-sm mb-5">
+                  Our team will contact you shortly.
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSubmitted(false);
+                    setSubmitError("");
+                  }}
+                  className="text-sm underline underline-offset-2 hover:text-foreground-muted transition"
+                >
+                  Submit another enquiry
+                </button>
               </div>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
-                  setSubmitted(true);
+
+                  try {
+                    setSubmitting(true);
+                    setSubmitError("");
+
+                    const res = await fetch("/api/leads", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        name: form.name,
+                        email: form.email,
+                        contact: form.phone,
+                        quantity: form.quantity ? Number(form.quantity) : undefined,
+                        message: form.message,
+                        productId: product.id,
+                        requirement: `Enquiry for ${product.name} (SKU: ${product.sku})`,
+                      }),
+                    });
+
+                    if (!res.ok) {
+                      const errorData = await res.json().catch(() => ({}));
+                      throw new Error(errorData?.error || "Failed to submit enquiry");
+                    }
+
+                    setSubmitted(true);
+                  } catch (err: any) {
+                    setSubmitError(err?.message || "Failed to submit enquiry");
+                  } finally {
+                    setSubmitting(false);
+                  }
                 }}
-                className="flex flex-col gap-4"
+                className="border rounded-2xl bg-surface p-5 sm:p-8 flex flex-col gap-5"
               >
-                <input
-                  placeholder="Name"
-                  required
-                  className="border p-3 rounded"
-                  onChange={(e) =>
-                    setForm({ ...form, name: e.target.value })
-                  }
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className="flex flex-col gap-2">
+                    <span className="text-xs tracking-[0.15em] uppercase text-foreground-muted">Name *</span>
+                    <input
+                      placeholder="Your full name"
+                      required
+                      className="h-11 border rounded-xl px-4 bg-background"
+                      value={form.name}
+                      onChange={(e) =>
+                        setForm({ ...form, name: e.target.value })
+                      }
+                    />
+                  </label>
 
-                <input
-                  placeholder="Email"
-                  required
-                  className="border p-3 rounded"
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
-                  }
-                />
+                  <label className="flex flex-col gap-2">
+                    <span className="text-xs tracking-[0.15em] uppercase text-foreground-muted">Email *</span>
+                    <input
+                      type="email"
+                      placeholder="your@email.com"
+                      required
+                      className="h-11 border rounded-xl px-4 bg-background"
+                      value={form.email}
+                      onChange={(e) =>
+                        setForm({ ...form, email: e.target.value })
+                      }
+                    />
+                  </label>
+                </div>
 
-                <textarea
-                  placeholder="Message"
-                  className="border p-3 rounded"
-                  onChange={(e) =>
-                    setForm({ ...form, message: e.target.value })
-                  }
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <label className="flex flex-col gap-2">
+                    <span className="text-xs tracking-[0.15em] uppercase text-foreground-muted">Phone</span>
+                    <input
+                      type="tel"
+                      placeholder="+91 98765 43210"
+                      required
+                      className="h-11 border rounded-xl px-4 bg-background"
+                      value={form.phone}
+                      onChange={(e) =>
+                        setForm({ ...form, phone: e.target.value })
+                      }
+                    />
+                  </label>
 
-                <button className="bg-black text-white py-3 rounded-full">
-                  Submit Enquiry
-                </button>
+                  <label className="flex flex-col gap-2">
+                    <span className="text-xs tracking-[0.15em] uppercase text-foreground-muted">Quantity Required</span>
+                    <input
+                      type="number"
+                      min={1}
+                      placeholder="e.g. 100"
+                      className="h-11 border rounded-xl px-4 bg-background"
+                      value={form.quantity}
+                      onChange={(e) =>
+                        setForm({ ...form, quantity: e.target.value })
+                      }
+                    />
+                  </label>
+                </div>
+
+                <label className="flex flex-col gap-2">
+                  <span className="text-xs tracking-[0.15em] uppercase text-foreground-muted">Product</span>
+                  <input
+                    readOnly
+                    className="h-11 border rounded-xl px-4 bg-secondary text-foreground-muted"
+                    value={`${product.name} (${product.sku})`}
+                  />
+                </label>
+
+                <label className="flex flex-col gap-2">
+                  <span className="text-xs tracking-[0.15em] uppercase text-foreground-muted">Additional Notes</span>
+                  <textarea
+                    placeholder="Customization requirements, delivery location, timeline..."
+                    className="border rounded-xl px-4 py-3 bg-background min-h-[120px]"
+                    value={form.message}
+                    onChange={(e) =>
+                      setForm({ ...form, message: e.target.value })
+                    }
+                  />
+                </label>
+
+                {submitError && (
+                  <p className="text-sm text-red-600">{submitError}</p>
+                )}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                  <button
+                    disabled={submitting}
+                    className="bg-black text-white py-3 rounded-full disabled:opacity-50 font-medium"
+                  >
+                    {submitting ? "Submitting..." : "Submit Enquiry"}
+                  </button>
+
+                  <a
+                    href={`https://wa.me/911234567890?text=${encodeURIComponent(
+                      `Hi, I'm interested in ${product.name} (SKU: ${product.sku})`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border py-3 rounded-full text-center inline-flex items-center justify-center gap-2 hover:bg-secondary transition"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp Instead
+                  </a>
+                </div>
               </form>
             )}
           </div>

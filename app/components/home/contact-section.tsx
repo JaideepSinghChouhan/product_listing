@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
-import { api } from "@/lib/api";
 
 export function ContactSection() {
   const [data, setData] = useState<any>(null);
@@ -27,7 +26,7 @@ export function ContactSection() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) {
+    if (!form.name || !form.contact) {
       alert("Please fill required fields");
       return;
     }
@@ -35,10 +34,23 @@ export function ContactSection() {
     try {
       setLoading(true);
 
-      await api("/leads", {
+      const res = await fetch("/api/leads", {
         method: "POST",
-        body: JSON.stringify(form),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          contact: form.contact,
+          companyName: form.company,
+          message: form.message,
+        }),
       });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit form");
+      }
 
       setForm({
         name: "",
