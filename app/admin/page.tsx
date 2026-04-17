@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import Sidebar from "./components/layout/Sidebar";
 import Topbar from "./components/layout/Topbar";
@@ -24,8 +25,29 @@ type Section =
   | "leads";
 
 export default function AdminPage() {
+  const router = useRouter();
   const [active, setActive] = useState<Section>("dashboard");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+    if (!token) {
+      router.replace("/admin/login");
+      return;
+    }
+
+    setCheckingAuth(false);
+  }, [router]);
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background text-sm text-muted-foreground">
+        Checking admin session...
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-background">

@@ -1,7 +1,7 @@
 const BASE_URL = "/api";
 
 export const api = async (url: string, options: any = {}) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
   const res = await fetch(`${BASE_URL}${url}`, {
     headers: {
