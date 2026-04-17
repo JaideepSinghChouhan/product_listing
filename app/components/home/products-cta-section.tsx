@@ -13,8 +13,9 @@ export function ProductsCtaSection() {
             fill
             sizes="100vw"
             className="object-cover opacity-30"
+            loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/40 to-black/20" />
         </div>
 
         <div className="relative grid items-center gap-8 lg:grid-cols-[1.2fr_0.8fr] px-6 sm:px-10 md:px-14 py-10 sm:py-14 md:py-16">

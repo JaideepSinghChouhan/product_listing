@@ -1,10 +1,14 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, BadgeCheck, Sparkles, Truck } from "lucide-react";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
-import { AboutSection } from "../components/home/about-section";
 import img from "@/public/vase.jpg";
+
+const AboutSection = dynamic(
+  () => import("../components/home/about-section").then((mod) => mod.AboutSection),
+);
 
 const highlights = [
   {
@@ -79,6 +83,7 @@ export default function AboutPage() {
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"
                   className="object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">

@@ -63,6 +63,7 @@ const handleDelete = async (id: string) => {
                         fill
                         sizes="40px"
                         className="object-cover"
+                        loading="lazy"
                       />
                     </div>
                     <span className="text-sm font-medium">{p.name}</span>

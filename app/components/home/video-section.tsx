@@ -137,6 +137,7 @@ export function VideoSection() {
 													fill
 													sizes="48px"
 													className="object-cover"
+													loading="lazy"
 												/>
 											</div>
 										) : (

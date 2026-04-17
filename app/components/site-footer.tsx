@@ -25,6 +25,7 @@ export function SiteFooter() {
                 fill
                 sizes="128px"
                 className="object-contain"
+                loading="lazy"
               />
             </div>
 

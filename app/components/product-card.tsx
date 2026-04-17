@@ -45,6 +45,7 @@ export function ProductCard({ product }: ProductCardProps) {
           className={`object-cover transition-transform duration-500 ${
             hovered ? "scale-110" : "scale-100"
           }`}
+          loading="lazy"
         />
 
         {/* CUSTOMIZABLE TAG */}

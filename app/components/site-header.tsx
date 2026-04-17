@@ -41,6 +41,7 @@ export function SiteHeader() {
             height={42}
             sizes="42px"
             className="object-contain"
+            loading="lazy"
           />
           <div className="leading-tight">
             <p className="text-base sm:text-lg font-serif">PR Associates</p>

@@ -127,7 +127,7 @@ export default function HeroSection() {
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {heroes.map((hero) => (
           <div key={hero.id} className="relative h-24 rounded overflow-hidden border group">
-            <Image src={hero.imageUrl} alt="" fill sizes="(max-width: 640px) 50vw, 33vw" className="object-cover" />
+            <Image src={hero.imageUrl} alt="" fill sizes="(max-width: 640px) 50vw, 33vw" className="object-cover" loading="lazy" />
 
             <button
               onClick={() => deleteHero(hero.id)}

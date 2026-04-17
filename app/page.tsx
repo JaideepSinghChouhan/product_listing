@@ -1,16 +1,29 @@
+import dynamic from "next/dynamic"
 import { SiteHeader } from "./components/site-header"
 import { SiteFooter } from "./components/site-footer"
 import { HeroSection } from "./components/home/hero-section"
-import { CategoriesSection } from "./components/home/categories-section"
-import { FeaturedProductsSection } from "./components/home/featured-products-section"
-import { TrustSection } from "./components/home/trust-section"
-// import { BulkSection } from "@/components/home/bulk-section"
-import { AboutSection } from "./components/home/about-section"
-import { TestimonialsSection } from "./components/home/testimonials-section"
-import { VideoSection } from "./components/home/video-section"
-import { ProductsCtaSection } from "./components/home/products-cta-section.tsx"
-// import { LeadCaptureSection } from "./components/home/lead-capture-section"
-import { ContactSection } from "./components/home/contact-section"
+
+const CategoriesSection = dynamic(
+  () => import("./components/home/categories-section").then((mod) => mod.CategoriesSection),
+)
+const FeaturedProductsSection = dynamic(
+  () => import("./components/home/featured-products-section").then((mod) => mod.FeaturedProductsSection),
+)
+const AboutSection = dynamic(
+  () => import("./components/home/about-section").then((mod) => mod.AboutSection),
+)
+const TestimonialsSection = dynamic(
+  () => import("./components/home/testimonials-section").then((mod) => mod.TestimonialsSection),
+)
+const VideoSection = dynamic(
+  () => import("./components/home/video-section").then((mod) => mod.VideoSection),
+)
+const ProductsCtaSection = dynamic(
+  () => import("./components/home/products-cta-section.tsx").then((mod) => mod.ProductsCtaSection),
+)
+const ContactSection = dynamic(
+  () => import("./components/home/contact-section").then((mod) => mod.ContactSection),
+)
 
 export default function HomePage() {
   return (
@@ -20,13 +33,10 @@ export default function HomePage() {
         <HeroSection />
         <CategoriesSection />
         <FeaturedProductsSection />
-        {/* <TrustSection /> */}
-        {/* <BulkSection /> */}
         <AboutSection />
         <VideoSection />
         <ProductsCtaSection />
         <TestimonialsSection />
-        {/* <LeadCaptureSection /> */}
         <ContactSection />
       </main>
       <SiteFooter />

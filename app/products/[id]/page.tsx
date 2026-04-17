@@ -122,6 +122,7 @@ export default function ProductDetailPage({ params}: PageProps) {
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-cover"
+                  loading="lazy"
                 />
 
                 <button className="absolute bottom-3 right-3 bg-white p-2 rounded-full">

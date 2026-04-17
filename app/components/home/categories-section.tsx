@@ -58,6 +58,7 @@ export function CategoriesSection() {
                 fill
                 sizes="(max-width: 640px) 50vw, 33vw"
                 className="object-cover group-hover:scale-105 transition"
+                loading="lazy"
               />
 
               <div className="absolute inset-0 bg-black/30" />
@@ -90,6 +91,7 @@ export function CategoriesSection() {
                   fill
                   sizes="(max-width: 640px) 140px, (max-width: 768px) 180px, 220px"
                   className="object-cover group-hover:scale-105 transition duration-300"
+                  loading="lazy"
                 />
 
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition" />
@@ -128,6 +130,7 @@ export function CategoriesSection() {
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition duration-300"
+                  loading="lazy"
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
