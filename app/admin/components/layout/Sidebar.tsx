@@ -8,6 +8,7 @@ import {
   Video,
   Star,
   Inbox,
+  Mail,
   ChevronRight,
 } from "lucide-react";
 
@@ -16,6 +17,7 @@ type Section =
   | "products"
   | "categories"
   | "hero"
+  | "contact"
   | "videos"
   | "testimonials"
   | "leads";
@@ -25,6 +27,7 @@ const navItems = [
   { id: "products", label: "Products", icon: Package },
   { id: "categories", label: "Categories", icon: Tag },
   { id: "hero", label: "Hero Section", icon: ImageIcon },
+  { id: "contact", label: "Contact Details", icon: Mail },
   { id: "videos", label: "Videos", icon: Video },
   { id: "testimonials", label: "Testimonials", icon: Star },
   { id: "leads", label: "Leads", icon: Inbox },
