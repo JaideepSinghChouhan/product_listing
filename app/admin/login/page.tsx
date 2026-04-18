@@ -13,11 +13,33 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const isTokenExpired = (token: string) => {
+    try {
+      const [, payload] = token.split(".");
+      if (!payload) return true;
+
+      const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+      const decoded = atob(base64);
+      const parsed = JSON.parse(decoded) as { exp?: number };
+
+      if (!parsed.exp) return true;
+      return parsed.exp * 1000 <= Date.now();
+    } catch {
+      return true;
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
-    if (token) {
+
+    if (token && !isTokenExpired(token)) {
       router.replace("/admin");
+      return;
     }
+
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("adminUser");
   }, [router]);
 
   const handleSubmit = async (event: React.FormEvent) => {

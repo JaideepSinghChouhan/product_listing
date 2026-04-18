@@ -134,5 +134,5 @@ enum Status {
 enum LeadStatus {
   NEW
   CONTACTED
-  QUOTED
+  CLOSED
 }
