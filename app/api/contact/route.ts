@@ -2,9 +2,53 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authMiddleware";
 
+const CONTACT_CACHE_TTL_MS = 60 * 1000;
+
+let contactCache: {
+  data: any;
+  expiresAt: number;
+} | null = null;
+
 export async function GET() {
-  const contact = await prisma.contactInfo.findFirst();
-  return NextResponse.json(contact);
+  const now = Date.now();
+
+  if (contactCache && contactCache.expiresAt > now) {
+    return NextResponse.json(contactCache.data, {
+      headers: {
+        "Cache-Control": "public, max-age=30, stale-while-revalidate=120",
+      },
+    });
+  }
+
+  try {
+    const contact = await prisma.contactInfo.findFirst();
+
+    contactCache = {
+      data: contact,
+      expiresAt: now + CONTACT_CACHE_TTL_MS,
+    };
+
+    return NextResponse.json(contact, {
+      headers: {
+        "Cache-Control": "public, max-age=30, stale-while-revalidate=120",
+      },
+    });
+  } catch (err: any) {
+    console.error("Contact fetch error:", err);
+
+    if (contactCache?.data) {
+      return NextResponse.json(contactCache.data, {
+        headers: {
+          "Cache-Control": "public, max-age=10, stale-while-revalidate=60",
+        },
+      });
+    }
+
+    return NextResponse.json(
+      { error: "Contact unavailable" },
+      { status: 503 }
+    );
+  }
 }
 
 
@@ -28,6 +72,11 @@ export async function POST(req: Request) {
         data: { address, phone, email, mapUrl },
       });
     }
+
+    contactCache = {
+      data: contact,
+      expiresAt: Date.now() + CONTACT_CACHE_TTL_MS,
+    };
 
     return NextResponse.json(contact);
   } catch (err:any) {

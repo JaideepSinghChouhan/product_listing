@@ -5,6 +5,7 @@ import logo from "@/public/logo-bg.png";
 import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
+import { getContactInfo } from "@/lib/contactClient";
 
 export function SiteFooter() {
   const [contact, setContact] = useState<{ email?: string; phone?: string } | null>(null);
@@ -12,8 +13,7 @@ export function SiteFooter() {
   useEffect(() => {
     const fetchContact = async () => {
       try {
-        const res = await fetch("/api/contact");
-        const data = await res.json();
+        const data = await getContactInfo();
         setContact(data);
       } catch (err) {
         console.error("Footer contact fetch error:", err);

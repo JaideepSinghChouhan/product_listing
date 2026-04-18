@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { use } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getContactInfo } from "@/lib/contactClient";
 import { SiteHeader } from "../../components/site-header";
 import { SiteFooter } from "../../components/site-footer";
 import { ProductCard } from "../../components/product-card";
@@ -12,7 +13,6 @@ import {
   ChevronRight,
   CheckCircle,
   Send,
-  ZoomIn,
 } from "lucide-react";
 import { ProductDetailSkeleton } from "../../components/skeletons";
 
@@ -24,10 +24,17 @@ const specs = [
   { label: "Material", value: "Premium Grade" },
   { label: "Dimensions", value: "Available on request" },
   { label: "MOQ", value: "50 units (bulk)" },
-  { label: "Lead Time", value: "7–14 business days" },
+  { label: "Lead Time", value: "7-14 business days" },
   { label: "Packaging", value: "Individual gift box" },
   { label: "Customization", value: "Logo, color, packaging" },
 ];
+
+const FALLBACK_PHONE = "919876543210";
+
+function normalizePhone(phone?: string) {
+  const digits = String(phone || "").replace(/\D/g, "");
+  return digits || FALLBACK_PHONE;
+}
 
 export default function ProductDetailPage({ params}: PageProps) {
   const { id } = use(params);
@@ -37,6 +44,7 @@ export default function ProductDetailPage({ params}: PageProps) {
   const [notFound, setNotFound] = useState(false);
   const [related, setRelated] = useState<any[]>([]);
   const [activeImage, setActiveImage] = useState(0);
+  const [contactPhone, setContactPhone] = useState(FALLBACK_PHONE);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
@@ -94,6 +102,15 @@ export default function ProductDetailPage({ params}: PageProps) {
 
     if (id) fetchProduct();
   }, [id]);
+
+  useEffect(() => {
+    const fetchContact = async () => {
+      const contact = await getContactInfo();
+      setContactPhone(normalizePhone(contact?.phone));
+    };
+
+    fetchContact();
+  }, []);
 
   if (loading) return <ProductDetailSkeleton />;
 
@@ -224,20 +241,14 @@ export default function ProductDetailPage({ params}: PageProps) {
                 </a>
 
                 <a
-                  href={`https://wa.me/911234567890?text=${encodeURIComponent(
+                  href={`https://wa.me/${contactPhone}?text=${encodeURIComponent(
                     `Hi, I'm interested in ${product.name} (SKU: ${product.sku})`
                   )}`}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex-1 text-center py-3 border rounded-full"
                 >
                   WhatsApp
-                </a>
-
-                <a
-                  href="tel:+919876543210"
-                  className="w-full sm:w-auto px-5 py-3 border rounded-full text-center"
-                >
-                  Call
                 </a>
               </div>
 
@@ -268,6 +279,26 @@ export default function ProductDetailPage({ params}: PageProps) {
                   )
                 )}
               </div>
+            </div>
+          </div>
+        </section>
+
+                {/* 🔥 RELATED PRODUCTS */}
+        <section className="py-12 px-4 border-t">
+          <div className="max-w-7xl mx-auto">
+
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6">
+              <h2 className="text-2xl font-playfair">
+                Related Products
+              </h2>
+
+              <Link href="/products">View all</Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           </div>
         </section>
@@ -444,7 +475,7 @@ export default function ProductDetailPage({ params}: PageProps) {
                   </button>
 
                   <a
-                    href={`https://wa.me/911234567890?text=${encodeURIComponent(
+                    href={`https://wa.me/${contactPhone}?text=${encodeURIComponent(
                       `Hi, I'm interested in ${product.name} (SKU: ${product.sku})`
                     )}`}
                     target="_blank"
@@ -460,25 +491,7 @@ export default function ProductDetailPage({ params}: PageProps) {
           </div>
         </section>
 
-        {/* 🔥 RELATED PRODUCTS */}
-        <section className="py-12 px-4 border-t">
-          <div className="max-w-7xl mx-auto">
 
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6">
-              <h2 className="text-2xl font-playfair">
-                Related Products
-              </h2>
-
-              <Link href="/products">View all</Link>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {related.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
 
       <SiteFooter />

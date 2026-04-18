@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Inter } from 'next/font/google'
 import { Playfair_Display } from 'next/font/google'
+import { FloatingWhatsApp } from "./components/floating-whatsapp";
 import "../styles/global.css";
 
 const inter = Inter({
@@ -43,6 +44,7 @@ export default function RootLayout({
     >
       <body className="font-sans antialiased bg-background text-foreground">
         {children}
+        <FloatingWhatsApp />
       </body>
     </html>
   );
