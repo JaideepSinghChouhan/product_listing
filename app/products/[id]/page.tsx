@@ -178,10 +178,6 @@ export default function ProductDetailPage({ params}: PageProps) {
                   className="object-cover"
                   loading="lazy"
                 />
-
-                <button className="absolute bottom-3 right-3 bg-white p-2 rounded-full">
-                  <ZoomIn className="w-4 h-4" />
-                </button>
               </div>
 
               {/* THUMBNAILS */}

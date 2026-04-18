@@ -89,15 +89,34 @@ export function FeaturedProductsSkeleton() {
 
 export function TestimonialsSkeleton() {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-elevated">
-      <SectionHeaderSkeleton />
+    <section className="relative overflow-hidden py-14 sm:py-16 md:py-20 bg-white">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 md:px-12 mb-10 sm:mb-12">
+        <div className="text-center max-w-2xl mx-auto">
+          <Skeleton width={140} height={24} className="mx-auto mb-4" />
+          <Skeleton width="70%" height={40} className="mx-auto mb-3" />
+          <Skeleton width="85%" height={14} className="mx-auto" />
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-4 sm:px-6 md:px-12">
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="bg-background border rounded-xl p-6">
-            <Skeleton width="60%" height={16} className="mx-auto mb-4" />
-            <Skeleton width="45%" height={16} className="mx-auto mb-3" />
-            <Skeleton count={3} />
+      <div className="relative z-10 flex flex-col gap-4 sm:gap-6 overflow-hidden px-4 sm:px-6 md:px-12">
+        {Array.from({ length: 2 }).map((_, rowIndex) => (
+          <div key={rowIndex} className="flex w-max py-1 gap-4">
+            {Array.from({ length: 4 }).map((__, index) => (
+              <div
+                key={`${rowIndex}-${index}`}
+                className="mx-2 sm:mx-3 w-[78vw] max-w-[280px] sm:w-[300px] md:w-[360px] flex-shrink-0 rounded-3xl border border-black/10 bg-white p-4 sm:p-5 md:p-6 shadow-[0_10px_40px_rgba(0,0,0,0.05)]"
+              >
+                <Skeleton width={56} height={18} className="mb-3" />
+                <Skeleton width="90%" height={12} className="mb-2" />
+                <Skeleton width="75%" height={12} className="mb-2" />
+                <Skeleton width="85%" height={12} />
+
+                <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-black/5">
+                  <Skeleton width={120} height={14} className="mb-2" />
+                  <Skeleton width={160} height={10} />
+                </div>
+              </div>
+            ))}
           </div>
         ))}
       </div>

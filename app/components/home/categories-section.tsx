@@ -107,6 +107,7 @@ export function CategoriesSection() {
         </div>
       )}
 
+      {/*
       {isScrollable && (
         <div className="px-4 sm:px-6 md:px-12 mt-10 sm:mt-14">
           <div className="text-center mb-6 sm:mb-8">
@@ -157,6 +158,7 @@ export function CategoriesSection() {
           )}
         </div>
       )}
+      */}
 
       {/* 🔥 PERFECT LOOP ANIMATION */}
       <style jsx>{`
