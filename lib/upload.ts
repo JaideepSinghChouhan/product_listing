@@ -22,3 +22,13 @@ export const uploadVideo = async (file: string) => {
     publicId: res.public_id,
   };
 };
+
+export const deleteImage = async (publicId: string) => {
+  try {
+    await cloudinary.uploader.destroy(publicId);
+    return { success: true };
+  } catch (err) {
+    console.error("Error deleting image:", err);
+    throw err;
+  }
+};

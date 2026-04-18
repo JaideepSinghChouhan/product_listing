@@ -185,12 +185,12 @@ export default function ProductDetailPage({ params}: PageProps) {
               </div>
 
               {/* THUMBNAILS */}
-              <div className="flex gap-2">
-                {images.slice(0, 4).map((img: string, i: number) => (
+              <div className="flex gap-2 overflow-x-auto pb-1">
+                {images.slice(0, 5).map((img: string, i: number) => (
                   <button
                     key={i}
                     onClick={() => setActiveImage(i)}
-                    className={`relative w-16 h-16 rounded-lg overflow-hidden border ${
+                    className={`relative w-16 h-16 shrink-0 rounded-lg overflow-hidden border ${
                       activeImage === i ? "border-black" : ""
                     }`}
                   >

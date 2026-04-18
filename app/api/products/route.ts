@@ -9,13 +9,25 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
-    const { name, description, categoryId, images, moq, sku, customization } = body;
+    const { name, description, categoryId, images = [], moq, sku, customization } = body;
     // Upload images
     if (!sku) {
     return NextResponse.json(
     { error: "SKU is required" },
     { status: 400 }
     );
+    }
+    if (!Array.isArray(images)) {
+      return NextResponse.json(
+        { error: "Images must be an array" },
+        { status: 400 }
+      );
+    }
+    if (images.length > 5) {
+      return NextResponse.json(
+        { error: "Maximum 5 images allowed per product" },
+        { status: 400 }
+      );
     }
     const uploadedImages =images.length > 0 ? await Promise.all(
       images.map((img: string) => uploadImage(img))

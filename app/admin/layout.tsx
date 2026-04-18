@@ -31,10 +31,16 @@ export default function AdminLayout({
   const pathname = usePathname();
   const [allowed, setAllowed] = useState(false);
 
-  const isLoginPage = useMemo(() => pathname === "/admin/login", [pathname]);
+  const isPublicAdminPage = useMemo(
+    () =>
+      pathname === "/admin/login" ||
+      pathname === "/admin/forgot-password" ||
+      pathname === "/admin/reset-password",
+    [pathname]
+  );
 
   useEffect(() => {
-    if (isLoginPage) {
+    if (isPublicAdminPage) {
       setAllowed(true);
       return;
     }
@@ -50,7 +56,7 @@ export default function AdminLayout({
     }
 
     setAllowed(true);
-  }, [isLoginPage, router]);
+  }, [isPublicAdminPage, router]);
 
   if (!allowed) {
     return null;

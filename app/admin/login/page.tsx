@@ -132,6 +132,11 @@ export default function AdminLoginPage() {
               placeholder="Your password"
               className="w-full rounded-xl border px-4 py-3 text-sm outline-none focus:border-black"
             />
+            <div className="mt-2 text-right">
+              <Link href="/admin/forgot-password" className="text-xs text-muted-foreground hover:text-black">
+                Forgot password?
+              </Link>
+            </div>
           </div>
 
           {error && (
