@@ -1,11 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import logo from "@/public/logo-bg.png";
 import Image from "next/image";
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 
 export function SiteFooter() {
+  const [contact, setContact] = useState<{ email?: string; phone?: string } | null>(null);
+
+  useEffect(() => {
+    const fetchContact = async () => {
+      try {
+        const res = await fetch("/api/contact");
+        const data = await res.json();
+        setContact(data);
+      } catch (err) {
+        console.error("Footer contact fetch error:", err);
+      }
+    };
+
+    fetchContact();
+  }, []);
+
   return (
     <footer className="bg-[#f5f1eb] text-black pt-12 pb-6">
 
@@ -38,11 +55,11 @@ export function SiteFooter() {
             </p>
 
             <p className="text-sm">
-              Email: <span className="font-medium">info@prassociates.com</span>
+              Email: <span className="font-medium">{contact?.email || "info@prassociates.com"}</span>
             </p>
 
             <p className="text-sm">
-              Phone: <span className="font-medium">+91 9876543210</span>
+              Phone: <span className="font-medium">{contact?.phone || "+91 9876543210"}</span>
             </p>
 
             {/* SOCIAL */}

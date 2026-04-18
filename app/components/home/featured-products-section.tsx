@@ -99,7 +99,7 @@ export function FeaturedProductsSection() {
               <Link
                 key={product.id}
                 href={`/products/${product.id}`}
-                className="bg-surface border rounded-xl overflow-hidden"
+                className="group bg-surface border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
               >
                 <div className="relative h-36 sm:h-48 md:h-52">
                   <Image
@@ -107,7 +107,7 @@ export function FeaturedProductsSection() {
                     alt={product.name}
                     fill
                     sizes="(max-width: 768px) 50vw, 25vw"
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                     loading="lazy"
                   />
                 </div>
