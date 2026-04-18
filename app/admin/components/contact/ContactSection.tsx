@@ -19,6 +19,31 @@ const emptyForm: ContactFormState = {
   mapUrl: "",
 };
 
+function normalizeIndianPhone(phone: string) {
+  const trimmed = phone.trim();
+  if (!trimmed) return "";
+
+  if (trimmed.startsWith("+91")) {
+    return trimmed;
+  }
+
+  const digits = trimmed.replace(/\D/g, "");
+
+  if (digits.length === 10) {
+    return `+91${digits}`;
+  }
+
+  if (digits.length === 11 && digits.startsWith("0")) {
+    return `+91${digits.slice(1)}`;
+  }
+
+  if (digits.length === 12 && digits.startsWith("91")) {
+    return `+${digits}`;
+  }
+
+  return trimmed.startsWith("+") ? trimmed : `+91${digits || trimmed}`;
+}
+
 export default function ContactSection() {
   const [form, setForm] = useState<ContactFormState>(emptyForm);
   const [loading, setLoading] = useState(true);
@@ -55,9 +80,16 @@ export default function ContactSection() {
     setMessage("");
 
     try {
+      const normalizedForm = {
+        ...form,
+        phone: normalizeIndianPhone(form.phone),
+      };
+
+      setForm(normalizedForm);
+
       const response = await api("/contact", {
         method: "POST",
-        body: JSON.stringify(form),
+        body: JSON.stringify(normalizedForm),
       });
 
       if (response?.error) {
@@ -119,6 +151,7 @@ export default function ContactSection() {
               <input
                 value={form.phone}
                 onChange={(e) => updateField("phone", e.target.value)}
+                onBlur={(e) => updateField("phone", normalizeIndianPhone(e.target.value))}
                 className="border rounded-xl px-4 py-3 bg-surface text-sm"
                 placeholder="Phone number"
               />

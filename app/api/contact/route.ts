@@ -4,6 +4,13 @@ import { requireAuth } from "@/lib/authMiddleware";
 
 const CONTACT_CACHE_TTL_MS = 60 * 1000;
 
+const CONTACT_FALLBACK = {
+  address: "",
+  phone: "+919876543210",
+  email: "info@prassociates.com",
+  mapUrl: "",
+};
+
 let contactCache: {
   data: any;
   expiresAt: number;
@@ -34,8 +41,6 @@ export async function GET() {
       },
     });
   } catch (err: any) {
-    console.error("Contact fetch error:", err);
-
     if (contactCache?.data) {
       return NextResponse.json(contactCache.data, {
         headers: {
@@ -44,10 +49,13 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json(
-      { error: "Contact unavailable" },
-      { status: 503 }
-    );
+    console.warn("Contact fetch fallback used:", err?.code || err?.message || "unknown error");
+
+    return NextResponse.json(CONTACT_FALLBACK, {
+      headers: {
+        "Cache-Control": "public, max-age=10, stale-while-revalidate=60",
+      },
+    });
   }
 }
 
