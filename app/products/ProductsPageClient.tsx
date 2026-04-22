@@ -7,6 +7,7 @@ import { ProductCard } from "../components/product-card";
 import { Search, MessageCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { ProductsListingSkeleton } from "../components/skeletons";
+import { motion, useReducedMotion } from "framer-motion";
 
 const sortOptions = [
   { value: "default", label: "Featured" },
@@ -19,6 +20,7 @@ export default function ProductsPageClient() {
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const reduceMotion = useReducedMotion();
 
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
@@ -96,18 +98,47 @@ export default function ProductsPageClient() {
       <SiteHeader />
 
       <main>
-        <section className="py-12 border-b">
+        <motion.section
+          className="py-12 border-b"
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="max-w-7xl mx-auto px-4 md:px-12">
-            <h1 className="text-3xl sm:text-4xl font-playfair mb-2">All Products</h1>
-            <p className="text-muted-foreground">
+            <motion.h1
+              className="text-3xl sm:text-4xl font-playfair mb-2"
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.04 }}
+            >
+              All Products
+            </motion.h1>
+            <motion.p
+              className="text-muted-foreground"
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: 0.08 }}
+            >
               Explore our full catalogue
-            </p>
+            </motion.p>
           </div>
-        </section>
+        </motion.section>
 
-        <section className="py-10">
+        <motion.section
+          className="py-10"
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="max-w-7xl mx-auto px-4 md:px-12">
-            <div className="flex flex-col gap-4 mb-8">
+            <motion.div
+              className="flex flex-col gap-4 mb-8"
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
               <div className="relative max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" />
                 <input
@@ -159,11 +190,17 @@ export default function ProductsPageClient() {
                   </option>
                 ))}
               </select>
-            </div>
+            </motion.div>
 
-            <p className="text-sm mb-4">
+            <motion.p
+              className="text-sm mb-4"
+              initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            >
               Showing {paged.length} of {filtered.length} products
-            </p>
+            </motion.p>
 
             {paged.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -182,25 +219,42 @@ export default function ProductsPageClient() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20">
+              <motion.div
+                className="text-center py-20"
+                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
                 <p className="text-xl">No products found</p>
-              </div>
+              </motion.div>
             )}
 
             {hasMore && (
-              <div className="text-center mt-10">
+              <motion.div
+                className="text-center mt-10"
+                initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+              >
                 <button
                   onClick={() => setPage((p) => p + 1)}
-                  className="px-6 py-3 border rounded-full"
+                  className="px-6 py-3 border rounded-full transition-transform hover:-translate-y-0.5"
                 >
                   Load More
                 </button>
-              </div>
+              </motion.div>
             )}
           </div>
-        </section>
+        </motion.section>
 
-        <section className="py-10 border-t">
+        <motion.section
+          className="py-10 border-t"
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
             <div>
               <h3 className="text-xl font-medium">
@@ -217,7 +271,7 @@ export default function ProductsPageClient() {
               WhatsApp
             </a>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       <SiteFooter />

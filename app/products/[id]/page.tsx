@@ -171,7 +171,12 @@ export default function ProductDetailPage({ params}: PageProps) {
 
       <main>
         {/* 🔹 BREADCRUMB */}
-        <nav className="max-w-7xl mx-auto px-4 md:px-12 py-4 flex items-center gap-2 text-xs text-gray-500">
+        <motion.nav
+          className="max-w-7xl mx-auto px-4 md:px-12 py-4 flex items-center gap-2 text-xs text-gray-500"
+          initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
           <Link href="/">Home</Link>
           <ChevronRight className="w-3 h-3" />
           <Link href="/products">Products</Link>
@@ -179,16 +184,30 @@ export default function ProductDetailPage({ params}: PageProps) {
           <span className="truncate max-w-[200px]">
             {product.name}
           </span>
-        </nav>
+        </motion.nav>
 
         {/* 🔥 MAIN SECTION */}
-        <section className="max-w-7xl mx-auto px-4 md:px-12 py-8 md:py-12">
+        <motion.section
+          className="max-w-7xl mx-auto px-4 md:px-12 py-8 md:py-12"
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
             {/* LEFT: IMAGES */}
-            <div className="flex flex-col gap-4">
+            <motion.div
+              className="flex flex-col gap-4"
+              initial={reduceMotion ? false : { opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.05 }}
+            >
 
-              <div className="relative aspect-square rounded-xl overflow-hidden border">
+              <motion.div
+                className="relative aspect-square rounded-xl overflow-hidden border"
+                whileHover={reduceMotion ? undefined : { scale: 1.01 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+              >
                 <Image
                   src={images[activeImage] || "/placeholder.png"}
                   alt={product.name}
@@ -197,26 +216,33 @@ export default function ProductDetailPage({ params}: PageProps) {
                   className="object-cover"
                   loading="lazy"
                 />
-              </div>
+              </motion.div>
 
               {/* THUMBNAILS */}
               <div className="flex gap-2 overflow-x-auto pb-1">
                 {images.slice(0, 5).map((img: string, i: number) => (
-                  <button
+                  <motion.button
                     key={i}
                     onClick={() => setActiveImage(i)}
                     className={`relative w-16 h-16 shrink-0 rounded-lg overflow-hidden border ${
                       activeImage === i ? "border-black" : ""
                     }`}
+                    whileHover={reduceMotion ? undefined : { y: -2 }}
+                    whileTap={reduceMotion ? undefined : { scale: 0.96 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <Image src={img} alt="" fill sizes="64px" className="object-cover" />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
-            </div>
+            </motion.div>
 
             {/* RIGHT: INFO */}
-            <div>
+            <motion.div
+              initial={reduceMotion ? false : { opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.08 }}
+            >
               <p className="text-xs uppercase text-gray-500 mb-2">
                 {product.category?.name}
               </p>
@@ -235,23 +261,27 @@ export default function ProductDetailPage({ params}: PageProps) {
 
               {/* CTA */}
               <div className="flex flex-col sm:flex-row gap-3 mb-6">
-                <a
-                  href="#enquiry-form"
-                  className="flex-1 text-center py-3 bg-black text-white rounded-full"
-                >
-                  Enquire Now
-                </a>
+                <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }} className="flex-1">
+                  <a
+                    href="#enquiry-form"
+                    className="block text-center py-3 bg-black text-white rounded-full"
+                  >
+                    Enquire Now
+                  </a>
+                </motion.div>
 
-                <a
-                  href={`https://wa.me/${contactPhone}?text=${encodeURIComponent(
-                    `Hi, I'm interested in ${product.name} (SKU: ${product.sku})`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 text-center py-3 border rounded-full"
-                >
-                  WhatsApp
-                </a>
+                <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }} className="flex-1">
+                  <a
+                    href={`https://wa.me/${contactPhone}?text=${encodeURIComponent(
+                      `Hi, I'm interested in ${product.name} (SKU: ${product.sku})`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-center py-3 border rounded-full"
+                  >
+                    WhatsApp
+                  </a>
+                </motion.div>
               </div>
 
               {/* SPECS */}
@@ -281,12 +311,18 @@ export default function ProductDetailPage({ params}: PageProps) {
                   )
                 )}
               </div>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
                 {/* 🔥 RELATED PRODUCTS */}
-        <section className="py-12 px-4 border-t">
+        <motion.section
+          className="py-12 px-4 border-t"
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="max-w-7xl mx-auto">
 
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-6">
@@ -294,7 +330,9 @@ export default function ProductDetailPage({ params}: PageProps) {
                 Related Products
               </h2>
 
-              <Link href="/products">View all</Link>
+              <Link href="/products" className="underline underline-offset-4">
+                View all
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -303,12 +341,25 @@ export default function ProductDetailPage({ params}: PageProps) {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* 🔥 ENQUIRY FORM */}
-        <section id="enquiry-form" className="py-14 sm:py-16 px-4 bg-surface-elevated border-t">
+        <motion.section
+          id="enquiry-form"
+          className="py-14 sm:py-16 px-4 bg-surface-elevated border-t"
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-8">
+            <motion.div
+              className="text-center mb-8"
+              initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+            >
               <p className="text-xs tracking-[0.28em] uppercase text-foreground-muted inline-flex items-center gap-3">
                 <span className="w-10 h-px bg-border" />
                 Enquire
@@ -322,7 +373,7 @@ export default function ProductDetailPage({ params}: PageProps) {
               <p className="text-foreground-muted text-sm mt-2">
                 Pre-filled with this product&apos;s details. We&apos;ll get back to you within 24 hours.
               </p>
-            </div>
+            </motion.div>
 
             <AnimatePresence mode="wait">
               {submitted ? (
@@ -505,7 +556,7 @@ export default function ProductDetailPage({ params}: PageProps) {
               )}
             </AnimatePresence>
           </div>
-        </section>
+        </motion.section>
 
 
       </main>

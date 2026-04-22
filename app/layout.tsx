@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Inter } from 'next/font/google'
 import { Playfair_Display } from 'next/font/google'
 import { FloatingWhatsApp } from "./components/floating-whatsapp";
+import { PageTransition } from "./components/page-transition";
 import "../styles/global.css";
 
 const inter = Inter({
@@ -43,7 +44,7 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="font-sans antialiased bg-background text-foreground">
-        {children}
+        <PageTransition>{children}</PageTransition>
         <FloatingWhatsApp />
       </body>
     </html>

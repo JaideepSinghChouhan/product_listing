@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   MessageCircle,
   ArrowRight,
@@ -66,11 +66,15 @@ export function HeroSection() {
       {/* BACKGROUND IMAGES */}
       <div className="absolute inset-0">
         {slides.map((slide, index) => (
-          <div
+          <motion.div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-700 ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
+            className="absolute inset-0"
+            initial={false}
+            animate={{
+              opacity: index === currentSlide ? 1 : 0,
+              scale: index === currentSlide ? 1.03 : 1,
+            }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
             <Image
               src={slide.imageUrl}
@@ -81,11 +85,25 @@ export function HeroSection() {
               priority={index === 0}
               loading={index === 0 ? "eager" : "lazy"}
             />
-          </div>
+          </motion.div>
         ))}
 
         {/* overlay */}
         <div className="absolute inset-0 bg-black/40" />
+
+        <motion.div
+          aria-hidden="true"
+          className="absolute -top-20 -left-16 w-64 h-64 rounded-full bg-white/10 blur-3xl"
+          animate={reduceMotion ? undefined : { x: [0, 24, 0], y: [0, 18, 0], opacity: [0.28, 0.45, 0.28] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        />
+
+        <motion.div
+          aria-hidden="true"
+          className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-amber-200/10 blur-3xl"
+          animate={reduceMotion ? undefined : { x: [0, -18, 0], y: [0, -20, 0], opacity: [0.2, 0.35, 0.2] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
       </div>
 
       {/* CONTENT */}
@@ -103,66 +121,76 @@ export function HeroSection() {
           transition={{ duration: 0.45, ease: "easeOut", delay: 0.05 }}
         >
 
-          {/* LABEL */}
-          <motion.p
-            className="text-[10px] tracking-[0.3em] uppercase mb-3"
-            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, ease: "easeOut", delay: 0.08 }}
-          >
-            {slides[currentSlide]?.heading || "Collection"}
-          </motion.p>
-
-          {/* TITLE */}
-          <motion.h1
-            className="font-playfair text-2xl sm:text-3xl md:text-5xl leading-tight mb-4"
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: 0.12 }}
-          >
-            {slides[currentSlide]?.heading || "Premium Products"}
-          </motion.h1>
-
-          {/* SUBTEXT */}
-          <motion.p
-            className="text-xs sm:text-sm md:text-base opacity-90 mb-6"
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: 0.18 }}
-          >
-            {slides[currentSlide]?.subtext || "Explore our collection"}
-          </motion.p>
-
-          {/* CTA */}
-          <motion.div
-            className="flex flex-col sm:flex-row gap-3"
-            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.45, ease: "easeOut", delay: 0.24 }}
-          >
-
-            <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
-              <Link
-                href="/products"
-                className="flex items-center justify-center gap-2 px-5 py-3 bg-white text-black rounded-full text-sm"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentSlide}
+              initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
+              transition={{ duration: 0.38, ease: "easeOut" }}
+            >
+              {/* LABEL */}
+              <motion.p
+                className="text-[10px] tracking-[0.3em] uppercase mb-3"
+                initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut", delay: 0.04 }}
               >
-                Explore
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </motion.div>
+                {slides[currentSlide]?.heading || "Collection"}
+              </motion.p>
 
-            <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
-              <a
-                href="https://wa.me/911234567890"
-                target="_blank"
-                className="flex items-center justify-center gap-2 px-5 py-3 border border-white rounded-full text-sm"
+              {/* TITLE */}
+              <motion.h1
+                className="font-playfair text-2xl sm:text-3xl md:text-5xl leading-tight mb-4"
+                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.38, ease: "easeOut", delay: 0.08 }}
               >
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp
-              </a>
-            </motion.div>
+                {slides[currentSlide]?.heading || "Premium Products"}
+              </motion.h1>
 
-          </motion.div>
+              {/* SUBTEXT */}
+              <motion.p
+                className="text-xs sm:text-sm md:text-base opacity-90 mb-6 max-w-lg"
+                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.38, ease: "easeOut", delay: 0.14 }}
+              >
+                {slides[currentSlide]?.subtext || "Explore our collection"}
+              </motion.p>
+
+              {/* CTA */}
+              <motion.div
+                className="flex flex-col sm:flex-row gap-3"
+                initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.38, ease: "easeOut", delay: 0.2 }}
+              >
+
+                <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+                  <Link
+                    href="/products"
+                    className="flex items-center justify-center gap-2 px-5 py-3 bg-white text-black rounded-full text-sm"
+                  >
+                    Explore
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </motion.div>
+
+                <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+                  <a
+                    href="https://wa.me/911234567890"
+                    target="_blank"
+                    className="flex items-center justify-center gap-2 px-5 py-3 border border-white rounded-full text-sm"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    WhatsApp
+                  </a>
+                </motion.div>
+
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </motion.div>
       </motion.div>
 
