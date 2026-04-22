@@ -1,5 +1,22 @@
 import nodemailer from "nodemailer";
 
+function createTransporter() {
+  const user = process.env.EMAIL_USER?.trim();
+  const pass = process.env.EMAIL_PASS?.replace(/\s+/g, "");
+
+  if (!user || !pass) {
+    throw new Error("Missing EMAIL_USER or EMAIL_PASS in environment");
+  }
+
+  return nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user,
+      pass,
+    },
+  });
+}
+
 function getMailerConfig() {
   const user = process.env.EMAIL_USER?.trim();
   const pass = process.env.EMAIL_PASS?.replace(/\s+/g, "");
@@ -21,6 +38,10 @@ function getSmtpConfig() {
   }
 
   return { user, pass };
+}
+
+function isGmailAddress(email?: string | null) {
+  return Boolean(email && email.toLowerCase().endsWith("@gmail.com"));
 }
 
 export const sendLeadEmail = async (lead: any) => {
@@ -58,16 +79,42 @@ export const sendLeadEmail = async (lead: any) => {
   });
 };
 
+export const sendLeadWelcomeEmail = async (lead: any) => {
+  const recipientEmail = lead.email?.trim();
+
+  if (!isGmailAddress(recipientEmail)) {
+    return;
+  }
+
+  const { user } = getSmtpConfig();
+  const transporter = createTransporter();
+  const productName = lead.product?.name ? lead.product.name : null;
+  const productSku = lead.product?.sku ? lead.product.sku : null;
+  const productLabel = productName
+    ? `${productName}${productSku ? ` (${productSku})` : ""}`
+    : null;
+
+  await transporter.sendMail({
+    from: `"PR Associates" <${user}>`,
+    to: recipientEmail,
+    subject: "Thanks for reaching out to PR Associates",
+    html: `
+      <h2>Hello ${lead.name || "there"},</h2>
+      <p>Thanks for your enquiry. We have received your request and our team will review it shortly.</p>
+      <p>We appreciate you reaching out to us.</p>
+      ${productLabel ? `<p><strong>Product:</strong> ${productLabel}</p>` : ""}
+      ${lead.requirement ? `<p><strong>Request:</strong> ${lead.requirement}</p>` : ""}
+      ${lead.message ? `<p><strong>Your message:</strong> ${lead.message}</p>` : ""}
+      <p>We will get back to you as soon as possible.</p>
+      <p>Best regards,<br />PR Associates</p>
+    `,
+  });
+};
+
 export const sendAdminPasswordResetEmail = async (toEmail: string, resetUrl: string) => {
   const { user, pass } = getSmtpConfig();
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user,
-      pass,
-    },
-  });
+  const transporter = createTransporter();
 
   await transporter.sendMail({
     from: `"PR Associates Admin" <${user}>`,

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { sendLeadEmail } from "@/lib/mail";
+import { sendLeadEmail, sendLeadWelcomeEmail } from "@/lib/mail";
 import { leadSchema } from "@/lib/validators";
 
 export async function POST(req: Request) {
@@ -37,33 +37,38 @@ export async function POST(req: Request) {
     }
 
     const lead = await prisma.lead.create({
-    data: {
-    name,
-    contact,
-    email: email || null,
-    companyName: companyName || null,
-    message: message || null,
-    requirement: requirement || null,
-    quantity: quantity ? Number(quantity) : null,
-    productId: productId || null,
-    utmSource: utmSource || null,
-    utmMedium: utmMedium || null,
-    utmCampaign: utmCampaign || null,
-  },
-});
-
-    try {
-      await sendLeadEmail(lead);
-    } catch (mailErr: any) {
-      console.error("Lead saved but notification failed:", mailErr);
-      return NextResponse.json(
-        {
-          error: "Lead saved, but notification email failed",
-          details: mailErr?.message || "Unknown mail error",
-          lead,
+      data: {
+        name,
+        contact,
+        email: email || null,
+        companyName: companyName || null,
+        message: message || null,
+        requirement: requirement || null,
+        quantity: quantity ? Number(quantity) : null,
+        productId: productId || null,
+        utmSource: utmSource || null,
+        utmMedium: utmMedium || null,
+        utmCampaign: utmCampaign || null,
+      },
+      include: {
+        product: {
+          select: {
+            name: true,
+            sku: true,
+          },
         },
-        { status: 500 }
-      );
+      },
+    });
+
+    const mailResults = await Promise.allSettled([
+      sendLeadEmail(lead),
+      sendLeadWelcomeEmail(lead),
+    ]);
+
+    const failedMails = mailResults.filter((result) => result.status === "rejected");
+
+    if (failedMails.length > 0) {
+      console.warn("Lead saved, but one or more emails failed:", failedMails);
     }
 
     return NextResponse.json(lead);
