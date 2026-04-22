@@ -10,6 +10,7 @@ export function ContactSection() {
   const [data, setData] = useState<any>(null);
   const [loadingContact, setLoadingContact] = useState(true);
   const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -36,10 +37,13 @@ export function ContactSection() {
   }, []);
 
   const handleSubmit = async () => {
-    if (!form.name || !form.contact) {
-      alert("Please fill required fields");
+    const validationError = validateForm();
+    if (validationError) {
+      setFormError(validationError);
       return;
     }
+
+    setFormError("");
 
     try {
       setLoading(true);
@@ -73,7 +77,7 @@ export function ContactSection() {
 
       setSubmitted(true);
     } catch (err: any) {
-      alert(err?.message || "Error submitting form");
+      setFormError(err?.message || "Error submitting form");
     } finally {
       setLoading(false);
     }
@@ -84,6 +88,31 @@ export function ContactSection() {
   if (!data) return null;
 
   const mapSrc = getGoogleMapsEmbedUrl(data.mapUrl, data.address);
+
+  const validateForm = () => {
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const company = form.company.trim();
+    const message = form.message.trim();
+    const contact = form.contact.trim();
+
+    if (name.length < 2) return "Please enter your name.";
+    if (!contact) return "Please enter your phone number.";
+
+    const phoneDigits = contact.replace(/\D/g, "");
+    if (phoneDigits.length < 8 || phoneDigits.length > 15) {
+      return "Please enter a valid phone number.";
+    }
+
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+      return "Please enter a valid email address.";
+    }
+
+    if (company.length > 100) return "Company name is too long.";
+    if (message.length > 1000) return "Message is too long.";
+
+    return "";
+  };
 
   return (
     <motion.section
@@ -208,18 +237,20 @@ export function ContactSection() {
                 <input
                   placeholder="Your Name *"
                   value={form.name}
-                  onChange={(e) =>
-                    setForm({ ...form, name: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormError("");
+                    setForm({ ...form, name: e.target.value });
+                  }}
                   className="border rounded-lg p-3 text-sm"
                 />
 
                 <input
                   placeholder="Email Address *"
                   value={form.email}
-                  onChange={(e) =>
-                    setForm({ ...form, email: e.target.value })
-                  }
+                  onChange={(e) => {
+                    setFormError("");
+                    setForm({ ...form, email: e.target.value });
+                  }}
                   className="border rounded-lg p-3 text-sm"
                 />
 
@@ -228,28 +259,33 @@ export function ContactSection() {
               <input
                 placeholder="Phone Number"
                 value={form.contact}
-                onChange={(e) =>
-                  setForm({ ...form, contact: e.target.value })
-                }
+                onChange={(e) => {
+                  setFormError("");
+                  setForm({ ...form, contact: e.target.value });
+                }}
                 className="border rounded-lg p-3 text-sm"
               />
               <input
                 placeholder="Company Name"
                 value={form.company}
-                onChange={(e) =>
-                  setForm({ ...form, company: e.target.value })
-                }
+                onChange={(e) => {
+                  setFormError("");
+                  setForm({ ...form, company: e.target.value });
+                }}
                 className="border rounded-lg p-3 text-sm"
               />
 
               <textarea
                 placeholder="Tell us about your requirements — product type, quantity..."
                 value={form.message}
-                onChange={(e) =>
-                  setForm({ ...form, message: e.target.value })
-                }
+                onChange={(e) => {
+                  setFormError("");
+                  setForm({ ...form, message: e.target.value });
+                }}
                 className="border rounded-lg p-3 text-sm min-h-[140px]"
               />
+
+              {formError && <p className="text-sm text-red-600">{formError}</p>}
 
               {/* BUTTONS */}
               <div className="flex gap-4 flex-col sm:flex-row mt-2">

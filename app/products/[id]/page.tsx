@@ -59,6 +59,30 @@ export default function ProductDetailPage({ params}: PageProps) {
     message: "",
   });
 
+  const validateForm = () => {
+    const name = form.name.trim();
+    const email = form.email.trim();
+    const phone = form.phone.trim();
+    const quantity = form.quantity.trim();
+    const message = form.message.trim();
+
+    if (name.length < 2) return "Please enter your full name.";
+    if (!/^\S+@\S+\.\S+$/.test(email)) return "Please enter a valid email address.";
+
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 8 || phoneDigits.length > 15) {
+      return "Please enter a valid phone number.";
+    }
+
+    if (quantity && (!/^\d+$/.test(quantity) || Number(quantity) < 1)) {
+      return "Quantity must be a positive whole number.";
+    }
+
+    if (message.length > 1000) return "Additional notes are too long.";
+
+    return "";
+  };
+
   // ✅ FETCH PRODUCT + RELATED
   useEffect(() => {
     const fetchProduct = async () => {
@@ -411,6 +435,12 @@ export default function ProductDetailPage({ params}: PageProps) {
                   key="form"
                   onSubmit={async (e) => {
                     e.preventDefault();
+
+                    const validationError = validateForm();
+                    if (validationError) {
+                      setSubmitError(validationError);
+                      return;
+                    }
 
                     try {
                       setSubmitting(true);

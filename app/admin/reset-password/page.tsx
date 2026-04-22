@@ -15,28 +15,26 @@ export default function AdminResetPasswordPage() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const validateForm = () => {
+    if (!token) return "Missing reset token";
+    if (!password || !confirmPassword) return "Please fill all fields";
+    if (password.length < 8) return "Password must be at least 8 characters";
+    if (password !== confirmPassword) return "Passwords do not match";
+    if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+      return "Password should include letters and numbers.";
+    }
+
+    return "";
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
     setMessage("");
 
-    if (!token) {
-      setError("Missing reset token");
-      return;
-    }
-
-    if (!password || !confirmPassword) {
-      setError("Please fill all fields");
-      return;
-    }
-
-    if (password.length < 8) {
-      setError("Password must be at least 8 characters");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 

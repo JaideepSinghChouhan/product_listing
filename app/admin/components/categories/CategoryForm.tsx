@@ -17,6 +17,7 @@ export default function CategoryForm({
   const [preview, setPreview] = useState("");
 
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (initialData) {
@@ -38,11 +39,32 @@ export default function CategoryForm({
 
   const handleSubmit = async () => {
     try {
+      setError("");
       setLoading(true);
+
+      if (name.trim().length < 2) {
+        setError("Category name is required.");
+        return;
+      }
+
+      if (description.trim().length > 500) {
+        setError("Description is too long.");
+        return;
+      }
 
       let imageBase64 = "";
 
       if (image) {
+        if (!image.type.startsWith("image/")) {
+          setError("Please upload an image file.");
+          return;
+        }
+
+        if (image.size > 5 * 1024 * 1024) {
+          setError("Image must be 5 MB or smaller.");
+          return;
+        }
+
         imageBase64 = await convertToBase64(image);
       }
 
@@ -57,7 +79,7 @@ export default function CategoryForm({
         });
       } else {
         if (!imageBase64) {
-          alert("Image required");
+          setError("Image required");
           return;
         }
 
@@ -76,7 +98,7 @@ export default function CategoryForm({
 
     } catch (err) {
       console.error(err);
-      alert("Error");
+      setError("Error");
     } finally {
       setLoading(false);
     }
@@ -100,7 +122,10 @@ export default function CategoryForm({
         {/* NAME */}
         <input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setError("");
+            setName(e.target.value);
+          }}
           placeholder="Category name"
           className="border p-3 rounded text-sm"
         />
@@ -108,7 +133,10 @@ export default function CategoryForm({
         {/* DESCRIPTION */}
         <textarea
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => {
+            setError("");
+            setDescription(e.target.value);
+          }}
           placeholder="Description"
           className="border p-3 rounded text-sm"
         />
@@ -124,12 +152,15 @@ export default function CategoryForm({
             onChange={(e) => {
               const file = e.target.files?.[0];
               if (file) {
+                setError("");
                 setImage(file);
                 setPreview(URL.createObjectURL(file));
               }
             }}
           />
         </label>
+
+        {error && <p className="text-sm text-red-600">{error}</p>}
 
         {/* PREVIEW */}
         {preview && (

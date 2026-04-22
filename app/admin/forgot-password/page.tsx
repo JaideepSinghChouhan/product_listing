@@ -9,13 +9,22 @@ export default function AdminForgotPasswordPage() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const validateForm = () => {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      return "Please enter a valid admin email address.";
+    }
+
+    return "";
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
     setMessage("");
 
-    if (!email.trim()) {
-      setError("Email is required");
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 

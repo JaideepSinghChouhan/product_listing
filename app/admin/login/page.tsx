@@ -29,6 +29,18 @@ export default function AdminLoginPage() {
     }
   };
 
+  const validateForm = () => {
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      return "Please enter a valid email address.";
+    }
+
+    if (password.trim().length < 8) {
+      return "Password must be at least 8 characters.";
+    }
+
+    return "";
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
 
@@ -46,8 +58,9 @@ export default function AdminLoginPage() {
     event.preventDefault();
     setError("");
 
-    if (!email.trim() || !password.trim()) {
-      setError("Email and password are required.");
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
