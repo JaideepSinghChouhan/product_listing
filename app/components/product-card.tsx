@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { Eye, MessageCircle } from "lucide-react";
 
 export interface Product {
@@ -21,6 +22,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const imageUrl =
     product.images?.[0]?.url || "/placeholder.png";
@@ -30,10 +32,16 @@ export function ProductCard({ product }: ProductCardProps) {
       : product.category?.name || "General";
 
   return (
-    <div
+    <motion.div
       className="group relative rounded-xl overflow-hidden bg-white border hover:shadow-lg transition-all duration-300"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.99 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
     >
       {/* IMAGE */}
       <div className="relative aspect-square overflow-hidden">
@@ -120,6 +128,6 @@ export function ProductCard({ product }: ProductCardProps) {
           SKU: {product.sku}
         </p>
       </div>
-    </div>
+    </motion.div>
   );
 }

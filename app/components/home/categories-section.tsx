@@ -3,11 +3,13 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { CategoriesSkeleton } from "../skeletons";
 
 export function CategoriesSection() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -31,17 +33,29 @@ export function CategoriesSection() {
   const featuredCategories = categories.slice(0, 6);
 
   return (
-    <section className="py-10 sm:py-14 md:py-20">
+    <motion.section
+      className="py-10 sm:py-14 md:py-20"
+      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
 
       {/* TITLE */}
-      <div className="px-4 sm:px-6 md:px-12 mb-6 sm:mb-10 flex flex-col justify-center items-center">
+      <motion.div
+        className="px-4 sm:px-6 md:px-12 mb-6 sm:mb-10 flex flex-col justify-center items-center"
+        initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.25 }}
+        transition={{ duration: 0.45, ease: "easeOut" }}
+      >
         <h2 className="font-playfair text-xl sm:text-2xl md:text-3xl">
           Browse Categories
         </h2>
         <p className="text-muted-foreground text-sm mt-1">
           Explore our wide range of products
         </p>
-      </div>
+      </motion.div>
 
       {/* 🔥 CASE 1: NORMAL GRID */}
       {!isScrollable && (
@@ -180,6 +194,6 @@ export function CategoriesSection() {
         }
       `}</style>
 
-    </section>
+    </motion.section>
   );
 }

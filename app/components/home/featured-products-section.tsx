@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import { FeaturedProductsSkeleton } from "../skeletons";
 
 export function FeaturedProductsSection() {
@@ -11,6 +12,7 @@ export function FeaturedProductsSection() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const reduceMotion = useReducedMotion();
 
   // 🔥 FETCH
   useEffect(() => {
@@ -55,10 +57,22 @@ export function FeaturedProductsSection() {
   if (loading) return <FeaturedProductsSkeleton />;
 
   return (
-    <section className="py-10 sm:py-14 md:py-20">
+    <motion.section
+      className="py-10 sm:py-14 md:py-20"
+      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
         {/* HEADER */}
-        <div className="mb-6 sm:mb-8">
+        <motion.div
+          className="mb-6 sm:mb-8"
+          initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <h2 className="font-playfair text-xl sm:text-2xl md:text-3xl text-center">
             Featured Products
           </h2>
@@ -90,17 +104,23 @@ export function FeaturedProductsSection() {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* GRID */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {products.length > 0 ? (
             products.map((product) => (
-              <Link
+              <motion.div
                 key={product.id}
-                href={`/products/${product.id}`}
-                className="group bg-surface border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                whileHover={reduceMotion ? undefined : { y: -4 }}
+                whileTap={reduceMotion ? undefined : { scale: 0.99 }}
+                transition={{ duration: 0.2 }}
+                className="group"
               >
+                <Link
+                  href={`/products/${product.id}`}
+                  className="block bg-surface border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
+                >
                 <div className="relative h-36 sm:h-48 md:h-52">
                   <Image
                     src={product.images?.[0]?.url || "/placeholder.png"}
@@ -117,7 +137,8 @@ export function FeaturedProductsSection() {
                     {product.name}
                   </h3>
                 </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))
           ) : (
             <div className="col-span-full text-center py-10 text-muted-foreground">
@@ -137,6 +158,6 @@ export function FeaturedProductsSection() {
         </div>
       </div>
 
-    </section>
+    </motion.section>
   );
 }

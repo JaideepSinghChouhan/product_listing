@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, MessageCircle, CheckCircle2 } from "lucide-react";
 import { ContactSectionSkeleton } from "../skeletons";
 import { getGoogleMapsEmbedUrl } from "@/lib/maps";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 export function ContactSection() {
   const [data, setData] = useState<any>(null);
   const [loadingContact, setLoadingContact] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -16,6 +18,7 @@ export function ContactSection() {
     contact: "",
   });
   const [loading, setLoading] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   // FETCH CONTACT DATA
   useEffect(() => {
@@ -68,7 +71,7 @@ export function ContactSection() {
         contact: "",
       });
 
-      alert("Enquiry Sent!");
+      setSubmitted(true);
     } catch (err: any) {
       alert(err?.message || "Error submitting form");
     } finally {
@@ -83,7 +86,13 @@ export function ContactSection() {
   const mapSrc = getGoogleMapsEmbedUrl(data.mapUrl, data.address);
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-elevated">
+    <motion.section
+      className="py-12 sm:py-16 md:py-20 bg-surface-elevated"
+      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.18 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
 
       {/* HEADER */}
       <div className="text-center mb-12 px-4">
@@ -160,81 +169,114 @@ export function ContactSection() {
         </div>
 
         {/* RIGHT SIDE (FORM EXACT LIKE IMAGE) */}
-        <div className="border rounded-xl p-6 bg-background flex flex-col gap-4">
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-
-            <input
-              placeholder="Your Name *"
-              value={form.name}
-              onChange={(e) =>
-                setForm({ ...form, name: e.target.value })
-              }
-              className="border rounded-lg p-3 text-sm"
-            />
-
-            <input
-              placeholder="Email Address *"
-              value={form.email}
-              onChange={(e) =>
-                setForm({ ...form, email: e.target.value })
-              }
-              className="border rounded-lg p-3 text-sm"
-            />
-
-          </div>
-
-          <input
-            placeholder="Phone Number"
-            value={form.contact}
-            onChange={(e) =>
-              setForm({ ...form, contact: e.target.value })
-            }
-            className="border rounded-lg p-3 text-sm"
-          />
-          <input
-            placeholder="Company Name"
-            value={form.company}
-            onChange={(e) =>
-              setForm({ ...form, company: e.target.value })
-            }
-            className="border rounded-lg p-3 text-sm"
-          />
-
-          <textarea
-            placeholder="Tell us about your requirements — product type, quantity..."
-            value={form.message}
-            onChange={(e) =>
-              setForm({ ...form, message: e.target.value })
-            }
-            className="border rounded-lg p-3 text-sm min-h-[140px]"
-          />
-
-          {/* BUTTONS */}
-          <div className="flex gap-4 flex-col sm:flex-row mt-2">
-
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="bg-black text-white py-3 px-6 rounded-full text-sm flex-1 active:scale-95 disabled:opacity-50"
+        <AnimatePresence mode="wait">
+          {submitted ? (
+            <motion.div
+              key="submitted"
+              className="border rounded-xl p-6 bg-background flex flex-col gap-4 items-center justify-center text-center min-h-[420px]"
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
             >
-              {loading ? "Sending..." : "Send Enquiry"}
-            </button>
-
-            <a
-              href={`https://wa.me/${data.phone}`}
-              target="_blank"
-              className="border py-3 px-6 rounded-full text-sm flex-1 text-center"
+              <div className="w-14 h-14 rounded-full bg-black text-white flex items-center justify-center">
+                <CheckCircle2 className="w-7 h-7" />
+              </div>
+              <h3 className="font-playfair text-2xl sm:text-3xl">Enquiry Sent</h3>
+              <p className="text-muted-foreground text-sm max-w-sm">
+                Thanks for reaching out. We have received your enquiry and a welcome mail has been sent if you used a Gmail address.
+              </p>
+              <button
+                type="button"
+                onClick={() => setSubmitted(false)}
+                className="mt-2 border py-3 px-6 rounded-full text-sm"
+              >
+                Send Another Enquiry
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="form"
+              className="border rounded-xl p-6 bg-background flex flex-col gap-4"
+              initial={reduceMotion ? false : { opacity: 0, x: 12 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -12 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
             >
-              WhatsApp Instead
-            </a>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-          </div>
+                <input
+                  placeholder="Your Name *"
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm({ ...form, name: e.target.value })
+                  }
+                  className="border rounded-lg p-3 text-sm"
+                />
 
-        </div>
+                <input
+                  placeholder="Email Address *"
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm({ ...form, email: e.target.value })
+                  }
+                  className="border rounded-lg p-3 text-sm"
+                />
+
+              </div>
+
+              <input
+                placeholder="Phone Number"
+                value={form.contact}
+                onChange={(e) =>
+                  setForm({ ...form, contact: e.target.value })
+                }
+                className="border rounded-lg p-3 text-sm"
+              />
+              <input
+                placeholder="Company Name"
+                value={form.company}
+                onChange={(e) =>
+                  setForm({ ...form, company: e.target.value })
+                }
+                className="border rounded-lg p-3 text-sm"
+              />
+
+              <textarea
+                placeholder="Tell us about your requirements — product type, quantity..."
+                value={form.message}
+                onChange={(e) =>
+                  setForm({ ...form, message: e.target.value })
+                }
+                className="border rounded-lg p-3 text-sm min-h-[140px]"
+              />
+
+              {/* BUTTONS */}
+              <div className="flex gap-4 flex-col sm:flex-row mt-2">
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="bg-black text-white py-3 px-6 rounded-full text-sm flex-1 active:scale-95 disabled:opacity-50"
+                >
+                  {loading ? "Sending..." : "Send Enquiry"}
+                </button>
+
+                <a
+                  href={`https://wa.me/${data.phone}`}
+                  target="_blank"
+                  className="border py-3 px-6 rounded-full text-sm flex-1 text-center"
+                >
+                  WhatsApp Instead
+                </a>
+
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
 
-    </section>
+    </motion.section>
   );
 }

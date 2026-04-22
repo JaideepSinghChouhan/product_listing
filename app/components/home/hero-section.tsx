@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   MessageCircle,
   ArrowRight,
@@ -16,6 +17,7 @@ export function HeroSection() {
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
+  const reduceMotion = useReducedMotion();
 
   // FETCH
   useEffect(() => {
@@ -87,47 +89,82 @@ export function HeroSection() {
       </div>
 
       {/* CONTENT */}
-      <div className="relative z-10 w-full px-5 sm:px-6 md:px-12">
-        <div className="max-w-xl text-white">
+      <motion.div
+        className="relative z-10 w-full px-5 sm:px-6 md:px-12"
+        initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        key={currentSlide}
+      >
+        <motion.div
+          className="max-w-xl text-white"
+          initial={reduceMotion ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut", delay: 0.05 }}
+        >
 
           {/* LABEL */}
-          <p className="text-[10px] tracking-[0.3em] uppercase mb-3">
+          <motion.p
+            className="text-[10px] tracking-[0.3em] uppercase mb-3"
+            initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut", delay: 0.08 }}
+          >
             {slides[currentSlide]?.heading || "Collection"}
-          </p>
+          </motion.p>
 
           {/* TITLE */}
-          <h1 className="font-playfair text-2xl sm:text-3xl md:text-5xl leading-tight mb-4">
+          <motion.h1
+            className="font-playfair text-2xl sm:text-3xl md:text-5xl leading-tight mb-4"
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut", delay: 0.12 }}
+          >
             {slides[currentSlide]?.heading || "Premium Products"}
-          </h1>
+          </motion.h1>
 
           {/* SUBTEXT */}
-          <p className="text-xs sm:text-sm md:text-base opacity-90 mb-6">
+          <motion.p
+            className="text-xs sm:text-sm md:text-base opacity-90 mb-6"
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut", delay: 0.18 }}
+          >
             {slides[currentSlide]?.subtext || "Explore our collection"}
-          </p>
+          </motion.p>
 
           {/* CTA */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          <motion.div
+            className="flex flex-col sm:flex-row gap-3"
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: "easeOut", delay: 0.24 }}
+          >
 
-            <Link
-              href="/products"
-              className="flex items-center justify-center gap-2 px-5 py-3 bg-white text-black rounded-full text-sm"
-            >
-              Explore
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+              <Link
+                href="/products"
+                className="flex items-center justify-center gap-2 px-5 py-3 bg-white text-black rounded-full text-sm"
+              >
+                Explore
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </motion.div>
 
-            <a
-              href="https://wa.me/911234567890"
-              target="_blank"
-              className="flex items-center justify-center gap-2 px-5 py-3 border border-white rounded-full text-sm"
-            >
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </a>
+            <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
+              <a
+                href="https://wa.me/911234567890"
+                target="_blank"
+                className="flex items-center justify-center gap-2 px-5 py-3 border border-white rounded-full text-sm"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp
+              </a>
+            </motion.div>
 
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
 
       {/* CONTROLS */}
       <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex gap-3 z-20">
