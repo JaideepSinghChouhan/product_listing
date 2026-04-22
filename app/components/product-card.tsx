@@ -65,13 +65,13 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* HOVER OVERLAY - desktop only */}
         <div
-          className={`hidden sm:flex absolute inset-0 bg-black/50 items-center justify-center gap-3 transition-all duration-300 ${
+          className={`hidden sm:flex absolute inset-0 bg-black/50 items-center justify-center gap-2 p-3 transition-all duration-300 ${
             hovered ? "opacity-100" : "opacity-0"
           }`}
         >
           <Link
             href={`/products/${product.id}`}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black text-sm rounded-full hover:bg-gray-200 whitespace-nowrap"
+            className="w-full max-w-[150px] flex items-center justify-center gap-1.5 px-3 py-2 bg-white text-black text-xs md:text-sm rounded-full hover:bg-gray-200"
           >
             <Eye className="w-4 h-4" />
             View
@@ -83,7 +83,7 @@ export function ProductCard({ product }: ProductCardProps) {
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-black text-white text-sm rounded-full whitespace-nowrap"
+            className="w-full max-w-[150px] flex items-center justify-center gap-1.5 px-3 py-2 bg-black text-white text-xs md:text-sm rounded-full"
           >
             <MessageCircle className="w-4 h-4" />
             Enquire
@@ -95,7 +95,7 @@ export function ProductCard({ product }: ProductCardProps) {
       <div className="flex sm:hidden gap-2 p-3 pt-3">
         <Link
           href={`/products/${product.id}`}
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-black text-white text-xs rounded-full whitespace-nowrap"
+          className="flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2.5 py-2 bg-black text-white text-[11px] rounded-full"
         >
           <Eye className="w-3.5 h-3.5" />
           View
@@ -107,7 +107,7 @@ export function ProductCard({ product }: ProductCardProps) {
           )}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 border border-black text-xs rounded-full whitespace-nowrap"
+          className="flex-1 min-w-0 flex items-center justify-center gap-1.5 px-2.5 py-2 border border-black text-[11px] rounded-full"
         >
           <MessageCircle className="w-3.5 h-3.5" />
           Enquire
