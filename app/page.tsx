@@ -47,9 +47,9 @@ export default function HomePage() {
         <HeroSection />
         <CategoriesSection />
         <FeaturedProductsSection />
-        <VideoSection />
         <AboutSection />
         <ProductsCtaSection />
+        <VideoSection />
         <TestimonialsSection />
         <ContactSection />
       </main>
