@@ -1,4 +1,4 @@
-import "dotenv/config";
+// import "dotenv/config";
 import {prisma} from "../lib/prisma.ts";
 import bcrypt from "bcrypt";
 
