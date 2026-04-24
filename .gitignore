@@ -43,4 +43,6 @@ next-env.d.ts
 /app/generated/prisma
 
 DECISIONS.md
+SUPERADMIN*
 images
+scripts

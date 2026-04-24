@@ -13,6 +13,7 @@ import ContactSection from "./components/contact/ContactSection";
 import VideosSection from "./components/videos/VideosSection";
 import TestimonialsSection from "./components/testimonials/TestimonialsSection";
 import LeadsSection from "./components/leads/LeadsSection";
+import AdminsSection from "./components/admins/AdminsSection";
 
 type Section =
   | "dashboard"
@@ -22,22 +23,26 @@ type Section =
   | "contact"
   | "videos"
   | "testimonials"
-  | "leads";
+  | "leads"
+  | "admins";
 
 export default function AdminPage() {
   const router = useRouter();
   const [active, setActive] = useState<Section>("dashboard");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [adminRole, setAdminRole] = useState<string | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+    const role = localStorage.getItem("adminRole");
 
     if (!token) {
       router.replace("/admin/login");
       return;
     }
 
+    setAdminRole(role);
     setCheckingAuth(false);
   }, [router]);
 
@@ -57,6 +62,7 @@ export default function AdminPage() {
         setActive={setActive}
         mobileOpen={mobileSidebarOpen}
         onCloseMobile={() => setMobileSidebarOpen(false)}
+        adminRole={adminRole}
       />
 
       <div className="flex-1 flex flex-col md:ml-0">
@@ -78,6 +84,8 @@ export default function AdminPage() {
         {active === "testimonials" && <TestimonialsSection />}
 
         {active === "leads" && <LeadsSection />}
+
+        {active === "admins" && <AdminsSection />}
         </div>
       </div>
 

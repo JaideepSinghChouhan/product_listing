@@ -15,17 +15,33 @@ import { HeroSectionSkeleton } from "../skeletons";
 export function HeroSection() {
   const [slides, setSlides] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [whatsappHref, setWhatsappHref] = useState("https://wa.me/919876543210");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const reduceMotion = useReducedMotion();
+
+  const buildWhatsappHref = (phone?: string) => {
+    const digits = String(phone || "").replace(/\D/g, "");
+    const normalizedPhone = digits || "919876543210";
+    const message = "Hello, I would like to know more about your products.";
+
+    return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
+  };
 
   // FETCH
   useEffect(() => {
     const fetchHero = async () => {
       try {
-        const res = await fetch("/api/hero");
-        const data = await res.json();
-        setSlides(data || []);
+        const [heroRes, contactRes] = await Promise.all([
+          fetch("/api/hero"),
+          fetch("/api/contact"),
+        ]);
+
+        const heroData = await heroRes.json();
+        const contactData = await contactRes.json();
+
+        setSlides(heroData || []);
+        setWhatsappHref(buildWhatsappHref(contactData?.phone));
       } finally {
         setLoading(false);
       }
@@ -179,8 +195,9 @@ export function HeroSection() {
 
                 <motion.div whileHover={reduceMotion ? undefined : { y: -2 }} whileTap={reduceMotion ? undefined : { scale: 0.98 }}>
                   <a
-                    href="https://wa.me/911234567890"
+                    href={whatsappHref}
                     target="_blank"
+                    rel="noreferrer"
                     className="flex items-center justify-center gap-2 px-5 py-3 border border-white rounded-full text-sm"
                   >
                     <MessageCircle className="w-4 h-4" />

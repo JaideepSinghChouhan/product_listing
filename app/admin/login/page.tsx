@@ -10,6 +10,7 @@ export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -52,6 +53,7 @@ export default function AdminLoginPage() {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("token");
     localStorage.removeItem("adminUser");
+    localStorage.removeItem("adminRole");
   }, [router]);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -83,6 +85,7 @@ export default function AdminLoginPage() {
 
       localStorage.setItem("adminToken", data.token);
       localStorage.setItem("adminUser", JSON.stringify(data.admin));
+      localStorage.setItem("adminRole", data.admin.role);
       localStorage.removeItem("token");
 
       router.replace("/admin");
@@ -139,13 +142,22 @@ export default function AdminLoginPage() {
           <div>
             <label className="block text-sm mb-2">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               placeholder="Your password"
               className="w-full rounded-xl border px-4 py-3 text-sm outline-none focus:border-black"
             />
-            <div className="mt-2 text-right">
+            <div className="mt-3 flex items-center justify-between">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={(event) => setShowPassword(event.target.checked)}
+                  className="w-4 h-4 rounded border border-gray-300 cursor-pointer accent-black"
+                />
+                <span className="text-sm text-muted-foreground">Show password</span>
+              </label>
               <Link href="/admin/forgot-password" className="text-xs text-muted-foreground hover:text-black">
                 Forgot password?
               </Link>

@@ -11,6 +11,7 @@ import {
   Inbox,
   Mail,
   ChevronRight,
+  Users,
 } from "lucide-react";
 import logo from "@/public/logo-bg.png";
 
@@ -22,7 +23,8 @@ type Section =
   | "contact"
   | "videos"
   | "testimonials"
-  | "leads";
+  | "leads"
+  | "admins";
 
 const navItems = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -33,6 +35,7 @@ const navItems = [
   { id: "videos", label: "Videos", icon: Video },
   { id: "testimonials", label: "Testimonials", icon: Star },
   { id: "leads", label: "Leads", icon: Inbox },
+  { id: "admins", label: "Manage Admins", icon: Users },
 ];
 
 export default function Sidebar({
@@ -40,12 +43,19 @@ export default function Sidebar({
   setActive,
   mobileOpen,
   onCloseMobile,
+  adminRole,
 }: {
   active: Section;
   setActive: (val: Section) => void;
   mobileOpen?: boolean;
   onCloseMobile?: () => void;
+  adminRole?: string | null;
 }) {
+  // Filter nav items - only superadmin sees "Manage Admins"
+  const filteredNavItems = navItems.filter(
+    (item) => item.id !== "admins" || adminRole?.toLowerCase() === "superadmin"
+  );
+
   return (
     <>
       {mobileOpen && (
@@ -84,7 +94,7 @@ export default function Sidebar({
 
       {/* Nav */}
       <nav className="flex-1 px-3 py-4 flex flex-col gap-1">
-        {navItems.map((item) => {
+        {filteredNavItems.map((item) => {
           const Icon = item.icon;
           const isActive = active === item.id;
 

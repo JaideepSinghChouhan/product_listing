@@ -39,6 +39,7 @@ export async function POST(req: Request) {
       admin: {
         id: admin.id,
         email: admin.email,
+        role: admin.role.toLowerCase(),
       },
     });
   } catch (err:any) {

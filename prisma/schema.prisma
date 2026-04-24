@@ -16,7 +16,7 @@ model Admin {
   id        String    @id @default(uuid())
   email     String    @unique
   password  String
-  role      String    @default("admin")
+  role      AdminRole @default(ADMIN)
   lastLogin DateTime?
   createdAt DateTime  @default(now())
 }
@@ -135,4 +135,9 @@ enum LeadStatus {
   NEW
   CONTACTED
   CLOSED
+}
+
+enum AdminRole {
+  ADMIN      @map("admin")
+  SUPERADMIN @map("superadmin")
 }
