@@ -10,6 +10,14 @@ import { getContactInfo } from "@/lib/contactClient";
 export function SiteFooter() {
   const [contact, setContact] = useState<{ email?: string; phone?: string } | null>(null);
 
+  const buildWhatsappHref = (phone?: string) => {
+    const digits = String(phone || "").replace(/\D/g, "");
+    const normalizedPhone = digits || "919876543210";
+    const message = "Hello, I would like to know more about your products.";
+
+    return `https://wa.me/${normalizedPhone}?text=${encodeURIComponent(message)}`;
+  };
+
   useEffect(() => {
     const fetchContact = async () => {
       try {
@@ -35,7 +43,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-4">
 
             {/* LOGO */}
-            <div className="relative w-32 h-20">
+            <div className="relative w-32 h-20 left-[-45px]">
               <Image
                 src={logo}
                 alt="PR Associates"
@@ -45,14 +53,14 @@ export function SiteFooter() {
                 loading="lazy"
               />
             </div>
-
-            <p className="text-sm font-medium">
-              PR Associates
-            </p>
-
-            <p className="text-sm text-muted-foreground">
-              Premium corporate gifting, custom branding, and bulk order support.
-            </p>
+            <div className="leading-tight">
+              <p className="text-sm font-medium">
+                PR Associates
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Elegance in every impression
+              </p>
+            </div>
 
             <p className="text-sm">
               Email: <span className="font-medium">{contact?.email || "info@prassociates.com"}</span>
@@ -64,9 +72,15 @@ export function SiteFooter() {
 
             {/* SOCIAL */}
             <div className="flex gap-3 mt-2">
-              <div className="border p-2 rounded-full">
+              <a
+                href={buildWhatsappHref(contact?.phone)}
+                target="_blank"
+                rel="noreferrer"
+                className="border p-2 rounded-full transition hover:bg-black hover:text-white"
+                aria-label="Chat on WhatsApp"
+              >
                 <MessageCircle className="w-4 h-4" />
-              </div>
+              </a>
             </div>
 
           </div>

@@ -9,7 +9,7 @@ export function AboutSection() {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-6 h-px bg-gold" />
-              <span className="text-xs tracking-[0.3em] uppercase text-gold font-sans">
+              <span className="text-xs tracking-[0.3em] uppercase text-gold font-sans semibold">
                 Our Story
               </span>
             </div>
@@ -30,10 +30,7 @@ export function AboutSection() {
               taglines, or promotional messages.
             </p>
             <p className="text-foreground-muted leading-relaxed mb-8">
-              Whether you need gifts for customer engagement, channel partner
-              programs, festivals, seminars, conferences, or employee
-              appreciation, we offer creative and meaningful options tailored to
-              every requirement. At PR Associate, we believe a gift goes beyond
+              At PR Associate, we believe a gift goes beyond
               the product—it reflects values, gratitude, and professionalism.
               With our focus on quality, innovation, and timely delivery, we
               ensure every gifting experience leaves a memorable impact. Let us

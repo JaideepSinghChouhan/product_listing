@@ -22,7 +22,7 @@ interface PageProps {
 }
 
 const specs = [
-  { label: "Material", value: "Premium Grade" },
+  { label: "Material", value: " Grade" },
   { label: "Dimensions", value: "Available on request" },
   { label: "MOQ", value: "50 units (bulk)" },
   { label: "Lead Time", value: "7-14 business days" },

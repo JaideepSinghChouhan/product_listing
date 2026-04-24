@@ -66,7 +66,7 @@ export function SiteHeader() {
           <div className="leading-tight">
             <p className="text-base sm:text-lg font-serif">PR Associates</p>
             <p className="text-[10px] tracking-widest text-gray-500">
-              PREMIUM
+              Elegance in every impression
             </p>
           </div>
         </Link>
