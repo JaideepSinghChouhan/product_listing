@@ -146,14 +146,14 @@ export function HeroSection() {
               transition={{ duration: 0.38, ease: "easeOut" }}
             >
               {/* LABEL */}
-              <motion.p
+              {/* <motion.p
                 className="text-[10px] tracking-[0.3em] uppercase mb-3"
                 initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut", delay: 0.04 }}
               >
                 {slides[currentSlide]?.heading || "Collection"}
-              </motion.p>
+              </motion.p> */}
 
               {/* TITLE */}
               <motion.h1
