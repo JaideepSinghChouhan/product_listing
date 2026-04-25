@@ -42,6 +42,8 @@ next-env.d.ts
 
 /app/generated/prisma
 
+FRONTEND_AGENT_CONTEXT.md
+PROJECT_CONTEXT.md
 DECISIONS.md
 SUPERADMIN*
 images

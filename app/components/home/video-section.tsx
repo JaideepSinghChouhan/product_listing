@@ -41,10 +41,16 @@ export function VideoSection() {
 		const fetchVideos = async () => {
 			try {
 				const res = await fetch("/api/videos");
-				const data = await res.json();
+				const contentType = res.headers.get("content-type") || "";
+				const rawBody = await res.text();
+				const data =
+					rawBody && contentType.includes("application/json")
+						? JSON.parse(rawBody)
+						: [];
 				setVideos(Array.isArray(data) ? data : []);
 			} catch (err) {
 				console.error("Video fetch error:", err);
+				setVideos([]);
 			} finally {
 				setLoading(false);
 			}

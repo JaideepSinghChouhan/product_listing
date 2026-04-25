@@ -13,7 +13,6 @@ export function AboutSection() {
       setImageUrl(data.homeAboutImageUrl);
     });
   }, []);
-  console.log("AboutSection imageUrl:", imageUrl);
 
   return (
     <section id="about" className="py-20 md:py-28 bg-background">
