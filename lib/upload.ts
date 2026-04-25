@@ -1,8 +1,8 @@
 import cloudinary from "./cloudinary";
 
-export const uploadImage = async (file: string) => {
+export const uploadImage = async (file: string, folder = "products") => {
   const res = await cloudinary.uploader.upload(file, {
-    folder: "products",
+    folder,
   });
 
   return {

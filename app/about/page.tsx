@@ -1,11 +1,15 @@
+"use client";
+
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { ArrowRight, BadgeCheck, Sparkles, Truck } from "lucide-react";
 import { SiteHeader } from "../components/site-header";
 import { SiteFooter } from "../components/site-footer";
 import img from "@/public/vase.jpg";
 import { AboutSectionSkeleton } from "../components/skeletons";
+import { getAboutImages } from "@/lib/aboutImagesClient";
 
 const AboutSection = dynamic(
   () => import("../components/home/about-section").then((mod) => mod.AboutSection),
@@ -34,6 +38,14 @@ const highlights = [
 ];
 
 export default function AboutPage() {
+  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    getAboutImages().then((data) => {
+      setHeroImageUrl(data.aboutPageHeroImageUrl);
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
@@ -80,7 +92,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden border bg-surface-elevated shadow-sm">
                 <Image
-                  src={img}
+                  src={heroImageUrl || img}
                   alt="Corporate gifting and product story"
                   fill
                   sizes="(max-width: 1024px) 100vw, 45vw"

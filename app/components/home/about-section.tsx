@@ -1,6 +1,20 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import img from "@/public/vase.jpg";
+import { getAboutImages } from "@/lib/aboutImagesClient";
+
 export function AboutSection() {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    getAboutImages().then((data) => {
+      setImageUrl(data.homeAboutImageUrl);
+    });
+  }, []);
+  console.log("AboutSection imageUrl:", imageUrl);
+
   return (
     <section id="about" className="py-20 md:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
@@ -59,7 +73,7 @@ export function AboutSection() {
           <div className="relative">
             <div className="relative aspect-[4/5] rounded-3xl overflow-hidden">
               <Image
-                src={img}
+                src={imageUrl || img}
                 alt="Our craft and story"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

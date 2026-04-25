@@ -9,6 +9,7 @@ import DashboardSection from "./components/dashboard/DashBoardSection";
 import ProductsSection from "./components/products/ProductsSection";
 import CategoriesSection from "./components/categories/CategoriesSection";
 import HeroSection from "./components/hero/HeroSection";
+import AboutImagesSection from "./components/about/AboutImagesSection";
 import ContactSection from "./components/contact/ContactSection";
 import VideosSection from "./components/videos/VideosSection";
 import TestimonialsSection from "./components/testimonials/TestimonialsSection";
@@ -20,6 +21,7 @@ type Section =
   | "products"
   | "categories"
   | "hero"
+  | "aboutImages"
   | "contact"
   | "videos"
   | "testimonials"
@@ -76,6 +78,8 @@ export default function AdminPage() {
         {active === "categories" && <CategoriesSection />}
 
         {active === "hero" && <HeroSection />}
+
+        {active === "aboutImages" && <AboutImagesSection />}
 
         {active === "contact" && <ContactSection />}
 

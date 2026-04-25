@@ -126,6 +126,15 @@ model ContactInfo {
   mapUrl  String
 }
 
+model AboutImage {
+  id        String   @id @default(uuid())
+  key       String   @unique
+  imageUrl  String
+  publicId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Status {
   ACTIVE
   HIDDEN
