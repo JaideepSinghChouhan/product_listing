@@ -98,10 +98,10 @@ export function SiteFooter() {
           <div className="sm:justify-self-end md:justify-self-auto">
             <h3 className="font-medium mb-4">Help</h3>
             <div className="flex flex-col gap-2 text-sm text-muted-foreground">
-              <Link href="#">Privacy Policy</Link>
-              <Link href="#">Refund Policy</Link>
-              <Link href="#">Shipping Policy</Link>
-              <Link href="#">Terms of Service</Link>
+              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link href="/refund-exchange-policy">Refund & Exchange Policy</Link>
+              <Link href="/shipping-policy">Shipping Policy</Link>
+              <Link href="/terms-of-service">Terms of Service</Link>
             </div>
           </div>
 
