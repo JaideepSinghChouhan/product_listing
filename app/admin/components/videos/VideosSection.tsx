@@ -26,6 +26,7 @@ export default function VideosSection() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [hoveredVideoId, setHoveredVideoId] = useState<string | null>(null);
 
   const fetchVideos = async () => {
     try {
@@ -230,57 +231,77 @@ export default function VideosSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {videos.map((video) => (
               <div key={video.id} className="border rounded-2xl overflow-hidden bg-background">
-                <div className="relative aspect-[9/16] bg-black">
-                {video.thumbnailUrl ? (
-                  <img
-                    src={video.thumbnailUrl}
-                    alt={video.title}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <video
-                    src={video.url}
-                    poster={video.thumbnailUrl || undefined}
-                    className="w-full h-full object-cover"
-                    muted
-                    playsInline
-                  />
-                )}
-                <div className="absolute inset-0 bg-black/10" />
-                <div className="absolute bottom-3 left-3 right-3 flex items-end gap-3">
-                  {video.thumbnailUrl && (
+                <div
+                  className="relative aspect-[9/16] bg-black cursor-pointer group"
+                  onMouseEnter={() => setHoveredVideoId(video.id)}
+                  onMouseLeave={() => setHoveredVideoId(null)}
+                >
+                  {hoveredVideoId === video.id ? (
+                    <video
+                      src={video.url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                    />
+                  ) : video.thumbnailUrl ? (
                     <img
                       src={video.thumbnailUrl}
-                      alt="thumb"
-                      className="w-11 h-11 rounded-lg object-cover border border-white/60 shadow-sm"
+                      alt={video.title}
+                      className="w-full h-full object-cover"
                     />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center" />
                   )}
-                  <div className="min-w-0 flex-1">
-                    <p className="text-white text-sm font-medium truncate">
-                      {video.title}
-                    </p>
-                    <p className="text-white/80 text-xs truncate">
-                      Portrait video
-                    </p>
+                  <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition" />
+                  {hoveredVideoId !== video.id && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm group-hover:bg-white/30 transition">
+                        <svg
+                          className="w-5 h-5 text-white ml-1"
+                          fill="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                  <div className="absolute bottom-3 left-3 right-3 flex items-end gap-3">
+                    {video.thumbnailUrl && (
+                      <img
+                        src={video.thumbnailUrl}
+                        alt="thumb"
+                        className="w-11 h-11 rounded-lg object-cover border border-white/60 shadow-sm"
+                      />
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="text-white text-sm font-medium truncate">
+                        {video.title}
+                      </p>
+                      <p className="text-white/80 text-xs truncate">
+                        Portrait video
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="p-4 flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">
-                    URL
-                  </p>
-                  <p className="text-sm truncate">{video.url}</p>
+                <div className="p-4 flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs text-muted-foreground uppercase tracking-[0.18em]">
+                      URL
+                    </p>
+                    <p className="text-sm truncate">{video.url}</p>
+                  </div>
+                  <button
+                    onClick={() => handleDelete(video.id)}
+                    className="p-2 rounded-lg hover:bg-accent/10"
+                    disabled={loading}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => handleDelete(video.id)}
-                  className="p-2 rounded-lg hover:bg-accent/10"
-                  disabled={loading}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
               </div>
             ))}
           </div>
