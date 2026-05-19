@@ -56,9 +56,11 @@ export async function PUT(req: Request, context: any) {
       allImages = [...allImages, ...uploadedImages];
     }
 
-    // Delete removed images from Cloudinary
+    // Delete removed images from Cloudinary (don't throw if it fails)
     if (removedImageIds.length > 0) {
-      await Promise.all(removedImageIds.map((publicId: string) => deleteImage(publicId)));
+      await Promise.allSettled(
+        removedImageIds.map((publicId: string) => deleteImage(publicId))
+      );
     }
 
     const updated = await prisma.product.update({
@@ -81,6 +83,7 @@ export async function PUT(req: Request, context: any) {
 
 export async function DELETE(req: Request, { params }: any) {
   try {
+    requireAuth(req);
     const { id } = await params;
 
     // Get product to delete all its images
@@ -88,24 +91,35 @@ export async function DELETE(req: Request, { params }: any) {
       where: { id },
     });
 
-    if (product && product.images) {
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+
+    // Delete images from Cloudinary (don't throw if it fails)
+    if (product.images && Array.isArray(product.images)) {
       const images = product.images as any[];
-      await Promise.all(
-        images.map((img) => deleteImage(img.publicId))
+      await Promise.allSettled(
+        images.map((img) => {
+          if (img?.publicId) {
+            return deleteImage(img.publicId);
+          }
+          return Promise.resolve();
+        })
       );
     }
 
+    // Delete product from database
     await prisma.product.delete({
       where: { id },
     });
 
-    return NextResponse.json({ message: "Product deleted" });
+    return NextResponse.json({ message: "Product deleted successfully" });
   } catch (err: any) {
     console.error("DELETE ERROR:", err);
-
+    const status = err?.message === "No token" ? 401 : 500;
     return NextResponse.json(
-      { error: "Delete failed", details: err.message },
-      { status: 500 }
+      { error: status === 401 ? "Unauthorized" : "Delete failed", details: err.message },
+      { status }
     );
   }
 }

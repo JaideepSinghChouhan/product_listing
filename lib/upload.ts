@@ -55,11 +55,23 @@ export const uploadVideo = async (file: string) => {
 };
 
 export const deleteImage = async (publicId: string) => {
+  if (!publicId) {
+    console.warn("No publicId provided for deletion");
+    return { success: true };
+  }
+
   try {
     await cloudinary.uploader.destroy(publicId);
+    console.log("Successfully deleted image from Cloudinary:", publicId);
     return { success: true };
-  } catch (err) {
-    console.error("Error deleting image:", err);
-    throw err;
+  } catch (err: any) {
+    // Log the error but don't crash - the record will still be deleted from DB
+    console.warn("Warning: Failed to delete from Cloudinary:", {
+      publicId,
+      message: err?.message,
+      status: err?.status,
+    });
+    // Return success anyway so the DB record gets deleted
+    return { success: true, warning: "Cloudinary deletion failed but record removed from DB" };
   }
 };
