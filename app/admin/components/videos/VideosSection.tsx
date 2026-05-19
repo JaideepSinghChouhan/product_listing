@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import { Plus, Trash2, Upload } from "lucide-react";
 import { api } from "@/lib/api";
+import {
+  uploadVideoToCloudinary,
+  uploadImageToCloudinary,
+} from "@/lib/cloudinaryClient";
 
 function fileToDataUrl(file: File) {
   return new Promise<string>((resolve, reject) => {
@@ -21,6 +25,7 @@ export default function VideosSection() {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const fetchVideos = async () => {
     try {
@@ -49,18 +54,41 @@ export default function VideosSection() {
 
     try {
       setSaving(true);
+      setUploadProgress(0);
 
-      const payload: any = {
-        title: title.trim(),
-        url: videoUrl.trim(),
-      };
+      let videoPublicId = null;
+      let finalVideoUrl = videoUrl.trim();
 
+      // Upload video directly to Cloudinary if file selected
       if (videoFile) {
-        payload.video = await fileToDataUrl(videoFile);
+        setUploadProgress(30);
+        const uploadedVideo = await uploadVideoToCloudinary(videoFile);
+        videoPublicId = uploadedVideo.publicId;
+        finalVideoUrl = uploadedVideo.url;
+        setUploadProgress(60);
       }
 
+      // Upload thumbnail if selected
+      let thumbnailData = null;
       if (thumbnailFile) {
-        payload.thumbnail = await fileToDataUrl(thumbnailFile);
+        const uploadedThumbnail = await uploadImageToCloudinary(
+          thumbnailFile,
+          "videos"
+        );
+        thumbnailData = uploadedThumbnail;
+        setUploadProgress(80);
+      }
+
+      // Send only metadata to API (no file upload needed)
+      const payload: any = {
+        title: title.trim(),
+        videoPublicId,
+        videoUrl: finalVideoUrl,
+      };
+
+      if (thumbnailData) {
+        payload.thumbnailPublicId = thumbnailData.publicId;
+        payload.thumbnailUrl = thumbnailData.url;
       }
 
       const res = await api("/videos", {
@@ -72,12 +100,19 @@ export default function VideosSection() {
         throw new Error(res?.details || res.error);
       }
 
+      setUploadProgress(100);
       setTitle("");
       setVideoUrl("");
       setVideoFile(null);
       setThumbnailFile(null);
       await fetchVideos();
     } catch (err: any) {
+      alert(err?.message || "Failed to save video");
+    } finally {
+      setSaving(false);
+      setUploadProgress(0);
+    }
+  };
       alert(err?.message || "Failed to save video");
     } finally {
       setSaving(false);
@@ -174,8 +209,16 @@ export default function VideosSection() {
             className="flex items-center justify-center gap-2 px-4 py-3 bg-black text-white rounded-xl text-sm disabled:opacity-50"
           >
             <Plus className="w-4 h-4" />
-            {saving ? "Saving..." : "Add Video"}
+            {saving ? `Uploading... ${uploadProgress}%` : "Add Video"}
           </button>
+          {uploadProgress > 0 && uploadProgress < 100 && (
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-black h-2 rounded-full transition-all"
+                style={{ width: `${uploadProgress}%` }}
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col gap-4">
