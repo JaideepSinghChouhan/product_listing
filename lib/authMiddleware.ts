@@ -40,7 +40,9 @@ export async function requireRole(
     ? requiredRole
     : [requiredRole];
   
-  if (!allowedRoles.includes(admin.role)) {
+  // admin.role comes from the database and is typed as string at runtime;
+  // cast to AdminRoleValue to satisfy TypeScript's union type for the includes check.
+  if (!allowedRoles.includes(admin.role as AdminRoleValue)) {
     throw new Error(
       `Access denied. Required role: ${allowedRoles.join(" or ")}`
     );

@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Image required" }, { status: 400 });
     }
 
-    const uploaded = await uploadImage(image);
+    const uploaded = await uploadImage(image, "heroes");
 
     const hero = await prisma.hero.create({
       data: {
