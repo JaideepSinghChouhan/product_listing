@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Trash2, Eye, EyeOff } from "lucide-react";
+import { Pencil, Trash2, Eye, EyeOff, X } from "lucide-react";
 import { api } from "@/lib/api";
 import CategoryForm from "./CategoryForm";
 
 export default function CategoriesTable({ categories, refresh }: any) {
   const [edit, setEdit] = useState<any>(null);
+  const [error, setError] = useState("");
 
   const toggle = async (id: string) => {
     await api(`/categories/${id}/toggle`, {
@@ -18,15 +19,38 @@ export default function CategoriesTable({ categories, refresh }: any) {
   const handleDelete = async (id: string) => {
     if (!confirm("Delete category permanently?")) return;
 
-    await api(`/categories/${id}`, {
-      method: "DELETE",
-    });
-
-    refresh();
+    try {
+      setError("");
+      await api(`/categories/${id}`, {
+        method: "DELETE",
+      });
+      refresh();
+    } catch (err: any) {
+      const errorMsg = err?.message || "Failed to delete category";
+      console.log("Setting error state:", errorMsg);
+      setError(errorMsg);
+      // Don't auto-clear - let user close manually
+    }
   };
 
   return (
     <>
+      {/* ERROR BANNER */}
+      {error && (
+        <div className="mb-4 bg-red-50 border border-red-200 rounded-lg p-4 flex justify-between items-start">
+          <div>
+            <p className="text-red-800 font-medium">Error</p>
+            <p className="text-red-700 text-sm mt-1">{error}</p>
+          </div>
+          <button
+            onClick={() => setError("")}
+            className="text-red-500 hover:text-red-700"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      )}
+
       <div className="border rounded-xl bg-surface overflow-hidden">
         <div className="overflow-x-auto">
         <table className="w-full min-w-[560px]">

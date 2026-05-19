@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Upload } from "lucide-react";
 import { api } from "@/lib/api";
+import { uploadImageToCloudinary } from "@/lib/cloudinaryClient";
 
 export default function CategoryForm({
   open,
@@ -18,6 +19,7 @@ export default function CategoryForm({
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     if (initialData) {
@@ -29,18 +31,11 @@ export default function CategoryForm({
 
   if (!open) return null;
 
-  const convertToBase64 = (file: File) =>
-    new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-    });
-
   const handleSubmit = async () => {
     try {
       setError("");
       setLoading(true);
+      setUploadProgress(0);
 
       if (name.trim().length < 2) {
         setError("Category name is required.");
@@ -52,7 +47,8 @@ export default function CategoryForm({
         return;
       }
 
-      let imageBase64 = "";
+      let imageUrl = initialData?.imageUrl || "";
+      let publicId = initialData?.publicId || "";
 
       if (image) {
         if (!image.type.startsWith("image/")) {
@@ -65,8 +61,16 @@ export default function CategoryForm({
           return;
         }
 
-        imageBase64 = await convertToBase64(image);
+        setUploadProgress(10);
+        const result = await uploadImageToCloudinary(image, "categories");
+        setUploadProgress(90);
+        
+        console.log("Cloudinary upload result:", result);
+        imageUrl = result.url;
+        publicId = result.publicId;
       }
+
+      console.log("Sending to API:", { name, description, imageUrl, publicId });
 
       if (initialData) {
         await api(`/categories/${initialData.id}`, {
@@ -74,11 +78,12 @@ export default function CategoryForm({
           body: JSON.stringify({
             name,
             description,
-            image: imageBase64 || undefined, // optional update
+            imageUrl,
+            publicId,
           }),
         });
       } else {
-        if (!imageBase64) {
+        if (!imageUrl) {
           setError("Image required");
           return;
         }
@@ -88,19 +93,22 @@ export default function CategoryForm({
           body: JSON.stringify({
             name,
             description,
-            image: imageBase64,
+            imageUrl,
+            publicId,
           }),
         });
       }
 
+      setUploadProgress(100);
       refresh();
       onClose();
 
     } catch (err) {
       console.error(err);
-      setError("Error");
+      setError("Error uploading or saving category");
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -161,6 +169,16 @@ export default function CategoryForm({
         </label>
 
         {error && <p className="text-sm text-red-600">{error}</p>}
+
+        {/* PROGRESS BAR */}
+        {uploadProgress > 0 && uploadProgress < 100 && (
+          <div className="w-full bg-gray-200 rounded overflow-hidden">
+            <div 
+              className="bg-accent h-2 transition-all"
+              style={{ width: `${uploadProgress}%` }}
+            />
+          </div>
+        )}
 
         {/* PREVIEW */}
         {preview && (

@@ -30,10 +30,22 @@ export const api = async (url: string, options: any = {}) => {
   }
 
   try {
-    return await res.json();
-  } catch (err) {
     const text = await res.text();
-    console.error("Failed to parse JSON response:", { status: res.status, text });
-    throw new Error(`Server error (${res.status}): ${text.substring(0, 100)}`);
+    const data = text ? JSON.parse(text) : {};
+
+    // If response is not ok (4xx, 5xx), throw the error message
+    if (!res.ok) {
+      const errorMsg = data.error || `Server error (${res.status})`;
+      throw new Error(errorMsg);
+    }
+
+    return data;
+  } catch (err: any) {
+    // If it's already an error with our message, rethrow it
+    if (err instanceof Error) {
+      throw err;
+    }
+    console.error("Failed to parse response:", { status: res.status, error: err });
+    throw new Error(`Server error (${res.status})`);
   }
 };
