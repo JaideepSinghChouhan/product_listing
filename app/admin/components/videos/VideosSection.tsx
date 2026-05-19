@@ -113,11 +113,6 @@ export default function VideosSection() {
       setUploadProgress(0);
     }
   };
-      alert(err?.message || "Failed to save video");
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this video?")) return;
