@@ -65,12 +65,9 @@ export default function CategoryForm({
         const result = await uploadImageToCloudinary(image, "categories");
         setUploadProgress(90);
         
-        console.log("Cloudinary upload result:", result);
         imageUrl = result.url;
         publicId = result.publicId;
       }
-
-      console.log("Sending to API:", { name, description, imageUrl, publicId });
 
       if (initialData) {
         await api(`/categories/${initialData.id}`, {

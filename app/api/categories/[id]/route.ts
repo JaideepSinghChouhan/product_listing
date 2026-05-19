@@ -12,8 +12,6 @@ export async function PUT(req: Request, context: any) {
 
     const { name, description, imageUrl, publicId } = await req.json();
 
-    console.log("PUT category:", { id, name, description, imageUrl, publicId });
-
     // Get existing category to check if image changed
     const existing = await prisma.category.findUnique({
       where: { id },
@@ -26,14 +24,10 @@ export async function PUT(req: Request, context: any) {
       );
     }
 
-    console.log("Existing category:", { existingPublicId: existing.publicId, newPublicId: publicId });
-
     // If updating with a new image (publicId changed), delete the old one
     if (existing.publicId && publicId && existing.publicId !== publicId) {
-      console.log("Deleting old image from Cloudinary:", existing.publicId);
       try {
         await deleteImage(existing.publicId);
-        console.log("Successfully deleted old image");
       } catch (err: any) {
         console.warn("Failed to delete old image:", err?.message);
         // Continue anyway - don't block the update
@@ -50,8 +44,6 @@ export async function PUT(req: Request, context: any) {
         publicId: publicId || existing.publicId,
       },
     });
-
-    console.log("Updated category:", updated);
 
     return NextResponse.json(updated);
   } catch (err: any) {

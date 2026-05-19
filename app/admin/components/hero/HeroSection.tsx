@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Upload, X } from "lucide-react";
 import { api } from "@/lib/api";
+import { uploadImageToCloudinary } from "@/lib/cloudinaryClient";
 
 export default function HeroSection() {
   const [heading, setHeading] = useState("");
@@ -14,6 +15,7 @@ export default function HeroSection() {
 
   const [heroes, setHeroes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // 🔥 FETCH ALL HERO SLIDES
   const fetchHeroes = async () => {
@@ -25,46 +27,49 @@ export default function HeroSection() {
     fetchHeroes();
   }, []);
 
-  const convertToBase64 = (file: File) =>
-    new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result as string);
-      reader.onerror = reject;
-    });
-
   const handleSave = async () => {
     try {
       setLoading(true);
+      setUploadProgress(0);
 
       if (!image) return;
 
-      const base64 = await convertToBase64(image);
+      setUploadProgress(10);
+      const result = await uploadImageToCloudinary(image, "hero");
+      setUploadProgress(90);
 
       await api("/hero", {
         method: "POST",
         body: JSON.stringify({
           heading,
           subtext,
-          image: base64,
+          imageUrl: result.url,
+          publicId: result.publicId,
         }),
       });
 
+      setUploadProgress(100);
       setImage(null);
       setPreview("");
       fetchHeroes();
 
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
   const deleteHero = async (id: string) => {
-    await api(`/hero/${id}`, {
-      method: "DELETE",
-    });
+    if (!confirm("Delete this hero slide?")) return;
 
-    fetchHeroes();
+    try {
+      await api(`/hero/${id}`, {
+        method: "DELETE",
+      });
+      fetchHeroes();
+    } catch (err: any) {
+      alert(err?.message || "Failed to delete");
+    }
   };
 
   return (
@@ -110,6 +115,16 @@ export default function HeroSection() {
         {preview && (
           <div className="relative w-full h-40">
             <img src={preview} className="w-full h-full object-cover rounded" />
+          </div>
+        )}
+
+        {/* PROGRESS BAR */}
+        {uploadProgress > 0 && uploadProgress < 100 && (
+          <div className="w-full bg-gray-200 rounded overflow-hidden">
+            <div 
+              className="bg-accent h-2 transition-all"
+              style={{ width: `${uploadProgress}%` }}
+            />
           </div>
         )}
 

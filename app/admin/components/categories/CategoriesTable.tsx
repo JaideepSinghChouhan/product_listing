@@ -27,9 +27,7 @@ export default function CategoriesTable({ categories, refresh }: any) {
       refresh();
     } catch (err: any) {
       const errorMsg = err?.message || "Failed to delete category";
-      console.log("Setting error state:", errorMsg);
       setError(errorMsg);
-      // Don't auto-clear - let user close manually
     }
   };
 

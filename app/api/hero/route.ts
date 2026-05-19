@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { requireAuth } from "@/lib/authMiddleware";
-import { uploadImage } from "@/lib/upload";
 
 export async function GET() {
   const heroes = await prisma.hero.findMany({
@@ -16,27 +15,28 @@ export async function POST(req: Request) {
   try {
     requireAuth(req);
 
-    const { heading, subtext, image } = await req.json();
+    const { heading, subtext, imageUrl, publicId } = await req.json();
 
-    if (!image) {
-      return NextResponse.json({ error: "Image required" }, { status: 400 });
+    if (!imageUrl || !publicId) {
+      return NextResponse.json(
+        { error: "imageUrl and publicId are required" },
+        { status: 400 }
+      );
     }
-
-    const uploaded = await uploadImage(image, "heroes");
 
     const hero = await prisma.hero.create({
       data: {
         heading,
         subtext,
-        imageUrl: uploaded.url,
-        publicId: uploaded.publicId,
+        imageUrl,
+        publicId,
       },
     });
 
     return NextResponse.json(hero);
 
   } catch (err: any) {
-    console.error("HERO CREATE ERROR:", err);
+    console.error("Hero create error:", err);
 
     return NextResponse.json(
       { error: "Failed to create hero slide", details: err.message },

@@ -21,10 +21,8 @@ export async function DELETE(req: Request, { params }: any) {
     if (hero.publicId) {
       try {
         await cloudinary.uploader.destroy(hero.publicId);
-        console.log("Deleted hero image from Cloudinary:", hero.publicId);
       } catch (err: any) {
-        console.warn("Failed to delete hero image from Cloudinary:", err?.message);
-        // Continue anyway - record will be deleted from DB
+        // Silently fail - continue with DB deletion
       }
     }
 
@@ -34,10 +32,9 @@ export async function DELETE(req: Request, { params }: any) {
 
     return NextResponse.json({ message: "Hero deleted successfully" });
   } catch (err: any) {
-    console.error("DELETE HERO ERROR:", err);
-    const status = err?.message === "No token" ? 401 : 500;
+    const status = err?.message?.includes("No token") ? 401 : 500;
     return NextResponse.json(
-      { error: status === 401 ? "Unauthorized" : "Delete failed", details: err.message },
+      { error: "Failed to delete hero", details: err.message },
       { status }
     );
   }
