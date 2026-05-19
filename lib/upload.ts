@@ -9,30 +9,49 @@ export const uploadImage = async (file: string, folder = "products") => {
     throw new Error("File must be base64 data URI");
   }
 
-  const res = await cloudinary.uploader.upload(file, {
-    folder,
-    unsigned: true,
-    upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-  });
+  try {
+    const res = await cloudinary.uploader.upload(file, {
+      folder,
+      unsigned: true,
+      upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+    });
 
-  return {
-    url: res.secure_url,
-    publicId: res.public_id,
-  };
+    return {
+      url: res.secure_url,
+      publicId: res.public_id,
+    };
+  } catch (err: any) {
+    console.error("Cloudinary upload error:", {
+      folder,
+      errorMessage: err?.message,
+      errorStatus: err?.status,
+      preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+    });
+    throw new Error(`Cloudinary upload failed: ${err?.message || "Unknown error"}`);
+  }
 };
 
 export const uploadVideo = async (file: string) => {
-  const res = await cloudinary.uploader.upload(file, {
-    folder: "videos",
-    resource_type: "video",
-    unsigned: true,
-    upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
-  });
+  try {
+    const res = await cloudinary.uploader.upload(file, {
+      folder: "videos",
+      resource_type: "video",
+      unsigned: true,
+      upload_preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+    });
 
-  return {
-    url: res.secure_url,
-    publicId: res.public_id,
-  };
+    return {
+      url: res.secure_url,
+      publicId: res.public_id,
+    };
+  } catch (err: any) {
+    console.error("Cloudinary video upload error:", {
+      errorMessage: err?.message,
+      errorStatus: err?.status,
+      preset: process.env.CLOUDINARY_UPLOAD_PRESET,
+    });
+    throw new Error(`Video upload failed: ${err?.message || "Unknown error"}`);
+  }
 };
 
 export const deleteImage = async (publicId: string) => {

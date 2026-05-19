@@ -29,5 +29,11 @@ export const api = async (url: string, options: any = {}) => {
     throw new Error("Unauthorized");
   }
 
-  return res.json();
+  try {
+    return await res.json();
+  } catch (err) {
+    const text = await res.text();
+    console.error("Failed to parse JSON response:", { status: res.status, text });
+    throw new Error(`Server error (${res.status}): ${text.substring(0, 100)}`);
+  }
 };
